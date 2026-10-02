@@ -9,3 +9,4 @@ coverage
 test-results
 playwright-report
 .atl
+.github/PULL_REQUEST_TEMPLATE.md

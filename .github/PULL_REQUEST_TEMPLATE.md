@@ -36,7 +36,7 @@ Closes #<!-- approved issue number -->
 
 ## Validation
 
-- [ ] Automated checks pass: `<!-- command -->`
+- [ ] Automated checks pass: `pnpm lint && pnpm check && pnpm test && pnpm build && pnpm test:e2e`
 - [ ] Manual validation completed
 - [ ] Documentation updated where behavior changed
 
