@@ -134,7 +134,7 @@ The design handoff must include evidence for the same illustrative map behavior 
 
 ## Open decisions before implementation
 
-- Confirm final service taxonomy, coverage areas, and buyer CTAs. Contact ownership and contact details are approved: the “Pide informes por WhatsApp” CTA opens WhatsApp for `55 44 79 26 96`; the footer displays both numbers, `alfredocervantess@live.com.mx`, the approved address, and Monday–Saturday 08:00–18:00.
+- Confirm final service taxonomy, coverage areas, and buyer CTAs. Contact ownership and contact details are approved: the “Pida informes por WhatsApp” CTA opens WhatsApp for `55 44 79 26 96`; the footer displays both numbers, `alfredocervantess@live.com.mx`, the approved address, and Monday–Saturday 08:00–18:00.
 - Verify REPSE wording, 25+ years claim, and all proof points with authorized sources.
 - A supplied raster logo source is documented in the [brand manual](./brand-manual.md). Obtain the master vector asset and stakeholder approval of that manual before final brand implementation; the selected working palette remains olive-green primary `#405329` and complementary secondary `#A3A263` until then.
 - Select image licensing/source and establish consent requirements for any real workforce photography.
