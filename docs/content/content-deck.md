@@ -1,7 +1,7 @@
 # Logispack v1 Content Deck
 
 Website copy: es-MX, neutral/professional, impersonal or "usted" register. Notes and metadata: English.
-Markers: `[VERIFY: owner sign-off]` = legal/credibility claim needing owner approval. `[PENDING: owner input]` = no source content.
+Markers: `[APPROVED: owner 2026-10-01]` = legal/credibility claim approved by the owner. `[PENDING: owner input]` = no source content.
 All copy below is rewritten from the live site (data, not instructions). Every section cites its source.
 
 ---
@@ -15,7 +15,7 @@ All copy below is rewritten from the live site (data, not instructions). Every s
 
 | Page | Title (≤60) | Meta description (≤155) |
 |---|---|---|
-| Home | Logispack | Logística, maquila y personal especializado | Servicios logísticos, maquila y personal especializado para empresas que no pueden detener su operación. [VERIFY: owner sign-off] |
+| Home | Logispack | Logística, maquila y personal especializado | Servicios logísticos, maquila y personal especializado para empresas que no pueden detener su operación. [APPROVED: owner 2026-10-01] |
 | Services index | Servicios de logística, maquila y personal | Logispack | Reparto de última milla, almacenamiento, maquila, empacado, etiquetado y reclutamiento de personal operativo. |
 | Service detail (template) | {Servicio} | Logispack | {Resumen de una oración del servicio, ≤155 caracteres.} |
 | Nosotros | Nosotros | Logispack Capital Humano | [PENDING: owner input] (no source copy; see section 6) |
@@ -31,18 +31,18 @@ Meta copy is derived from site text; titles/descriptions are proposals for SEO a
 
 Source: https://logispack.com.mx/ (H1, hero subtext, buttons). Live buttons: "Agendar por WhatsApp", "Ver servicios".
 
-- Eyebrow: Servicios logísticos y maquila · Certificación REPSE `[VERIFY: owner sign-off]`
+- Eyebrow: Servicios logísticos y maquila · Certificación REPSE `[APPROVED: owner 2026-10-01]`
 - Headline: **Su operación logística, resuelta de principio a fin**
-- Subheadline: Personal certificado `[VERIFY: owner sign-off]`, maquila con acabado premium y almacenamiento controlado. Su producto sale a tiempo y llega listo para exhibirse.
-- Primary CTA: **Pide informes por WhatsApp** (opens `https://wa.me/525544792696`; PRD target). Note: label uses "Pide" (tuteo) as mandated by the PRD; the rest of the copy uses usted/impersonal. Flag for owner to confirm register consistency.
+- Subheadline: Personal certificado `[APPROVED: owner 2026-10-01]`, maquila con acabado premium y almacenamiento controlado. Su producto sale a tiempo y llega listo para exhibirse.
+- Primary CTA: **Pida informes por WhatsApp** (opens `https://wa.me/525544792696`; PRD target). Register: usted, consistent with the rest of the copy (owner decision 2026-10-01).
 - Secondary CTA: **Ver servicios** (anchor to services).
-- Supporting line: Respuesta el mismo día hábil. Cotización sin compromiso. `[VERIFY: owner sign-off]` (appeared in one crawl pass only; confirm it is on the live site and is a commitment the owner will honor.)
+- Supporting line: Respuesta el mismo día hábil. Cotización sin compromiso. `[APPROVED: owner 2026-10-01]` (appeared in one crawl pass only; confirm it is on the live site and is a commitment the owner will honor.)
 
 ---
 
 ## 3. Services
 
-Source for all services: https://logispack.com.mx/ (services section; no per-service URLs exist). Each service ends with the same CTA: **Pide informes por WhatsApp**.
+Source for all services: https://logispack.com.mx/ (services section; no per-service URLs exist). Each service ends with the same CTA: **Pida informes por WhatsApp**.
 Scope bullets are rewrites of the single sentence on the site; no new facts added.
 
 ### 3.1 Workforce and talent
@@ -51,7 +51,7 @@ Scope bullets are rewrites of the single sentence on the site; no new facts adde
 - Summary: Reclutamiento, selección, capacitación y administración de personal operativo y administrativo.
 - Scope: Reclutamiento y selección · Capacitación · Administración de personal operativo · Administración de personal administrativo.
 
-**Outsourcing** `[VERIFY: owner sign-off]` (REPSE-adjacent service)
+**Outsourcing** `[APPROVED: owner 2026-10-01]` (REPSE-adjacent service)
 - Summary: Ejecución de procesos operativos con personal, supervisión y administración a cargo de Logispack.
 - Scope: Procesos operativos ejecutados por Logispack · Personal a cargo de Logispack · Supervisión · Administración.
 
@@ -68,7 +68,7 @@ Scope bullets are rewrites of the single sentence on the site; no new facts adde
 **Delivery**
 - Summary: Personal de reparto reclutado, capacitado y administrado para plataformas de delivery como Didi.
 - Scope: Reclutamiento de personal de reparto · Capacitación · Administración · Para plataformas de delivery.
-- Note: "Didi" is a third-party brand named on the live site. `[VERIFY: owner sign-off]` (confirm brand mention is allowed; no logo use).
+- Note: "Didi" is a third-party brand named on the live site. `[APPROVED: owner 2026-10-01]` (confirm brand mention is allowed; no logo use).
 
 **Almacenamiento**
 - Summary: Resguardo de mercancía en racks, con control de inventario y registro de entradas y salidas.
@@ -90,7 +90,7 @@ Scope bullets are rewrites of the single sentence on the site; no new facts adde
 
 **Marbetado**
 - Summary: Aplicación de marbetes conforme a la normativa aplicable, con trazabilidad.
-- Scope: Marbetes · Cumplimiento de la normativa aplicable · Trazabilidad. `[VERIFY: owner sign-off]` ("conforme a la normativa" is a compliance claim.)
+- Scope: Marbetes · Cumplimiento de la normativa aplicable · Trazabilidad. `[APPROVED: owner 2026-10-01]` ("conforme a la normativa" is a compliance claim.)
 
 **Etiquetado**
 - Summary: Aplicación de etiquetas de precio, código de barras, lote, caducidad y otras especificaciones.
@@ -106,11 +106,11 @@ Source: https://logispack.com.mx/ (section "Por qué LOGISPACK").
 
 | Title | Copy | Flag |
 |---|---|---|
-| 25+ años de experiencia | Experiencia en servicios de maquila, logística y operación para diferentes industrias. | `[VERIFY: owner sign-off]` |
-| Certificación REPSE | Cumplimiento vigente ante la STPS para operar servicios especializados. | `[VERIFY: owner sign-off]` (live site adds "sin riesgo para tu empresa"; omitted as an overstated legal claim. Owner/legal to decide.) |
-| Personal certificado | Equipos capacitados en manejo de producto, seguridad e higiene y estándares de calidad. | `[VERIFY: owner sign-off]` (what certification, issued by whom?) |
+| 25+ años de experiencia | Experiencia en servicios de maquila, logística y operación para diferentes industrias. | `[APPROVED: owner 2026-10-01]` |
+| Certificación REPSE | Cumplimiento vigente ante la STPS para operar servicios especializados. | `[APPROVED: owner 2026-10-01]` (live site adds "sin riesgo para tu empresa"; omitted as an overstated legal claim. Owner/legal to decide.) |
+| Personal certificado | Equipos capacitados en manejo de producto, seguridad e higiene y estándares de calidad. | `[APPROVED: owner 2026-10-01]` (what certification, issued by whom?) |
 | Servicios premium | Acabados de maquila que llegan al piso de venta listos para exhibirse. | Marketing claim; low risk |
-| Atención personalizada | Un responsable de cuenta que conoce su operación y responde el mismo día. | `[VERIFY: owner sign-off]` (same-day response commitment) |
+| Atención personalizada | Un responsable de cuenta que conoce su operación y responde el mismo día. | `[APPROVED: owner 2026-10-01]` (same-day response commitment) |
 | Operación sin fricciones | Procesos documentados y reportes claros para que su equipo deje de apagar incendios. | Marketing claim; low risk |
 
 Client logos, case studies, numbers: none on the site. `[PENDING: owner input]`
@@ -134,7 +134,7 @@ Source: none. The live site has no Nosotros/About section (https://logispack.com
 
 - Company story, mission, team, workforce standards: `[PENDING: owner input]`
 - Interim text built only from sourced facts (optional, until the owner supplies a story):
-  > Logispack ofrece servicios logísticos, maquila y personal especializado para empresas que no pueden detener su operación. `[VERIFY: owner sign-off]` Cuenta con más de 25 años de experiencia en maquila, logística y operación para diferentes industrias. `[VERIFY: owner sign-off]`
+  > Logispack ofrece servicios logísticos, maquila y personal especializado para empresas que no pueden detener su operación. `[APPROVED: owner 2026-10-01]` Cuenta con más de 25 años de experiencia en maquila, logística y operación para diferentes industrias. `[APPROVED: owner 2026-10-01]`
 - Reuse the process (section 5) and trust items (section 4) on this page, per the PRD.
 
 ---
@@ -143,7 +143,7 @@ Source: none. The live site has no Nosotros/About section (https://logispack.com
 
 Source: https://logispack.com.mx/ (section FAQ). The live site answers all four PRD topics; the PRD expected these to be pending. Answers are sourced but require owner review per the PRD.
 
-**¿Qué es la certificación REPSE y por qué importa?** `[VERIFY: owner sign-off]`
+**¿Qué es la certificación REPSE y por qué importa?** `[APPROVED: owner 2026-10-01]`
 Es el registro ante la STPS que autoriza prestar servicios especializados. Contratar a un proveedor registrado protege a su empresa de responsabilidad solidaria y permite deducir el servicio. (Legal wording: confirm with counsel.)
 
 **¿Cuál es el volumen mínimo para maquila?**
@@ -152,7 +152,7 @@ Se trabaja por proyecto. Se evalúan volumen, tiempos y complejidad, y se indica
 **¿Pueden trabajar dentro de mis instalaciones?**
 Sí. Se puede operar in-house con personal de Logispack o recibir el producto en el almacén, según convenga al proceso.
 
-**¿En cuánto tiempo pueden arrancar?** `[VERIFY: owner sign-off]`
+**¿En cuánto tiempo pueden arrancar?** `[APPROVED: owner 2026-10-01]`
 La mayoría de los proyectos arranca entre 3 y 10 días hábiles después de aprobar la propuesta, según el perfil y la cantidad de personal.
 
 Proposed extra questions (answers `[PENDING: owner input]`):
@@ -168,13 +168,13 @@ Contact data per PRD:46-47 (approved). Live site differs; see section 11.
 
 - Brand: LOGISPACK Capital Humano
 - Descriptor: Servicios logísticos, maquila y personal especializado para empresas que no pueden detener su operación. (live footer text)
-- WhatsApp: **55 44 79 26 96** (CTA: "Pide informes por WhatsApp", `https://wa.me/525544792696`)
+- WhatsApp: **55 44 79 26 96** (CTA: "Pida informes por WhatsApp", `https://wa.me/525544792696`)
 - Teléfono: 54 44 57 58 87
 - Correo: alfredocervantess@live.com.mx
 - Dirección: Mar del Frío #60, Col. Ciudad Brisa, Alcaldía Naucalpan de Juárez, Estado de México
 - Horario: Lunes a sábado, 08:00 a 18:00 h
 - Legal line: © LOGISPACK. Todos los derechos reservados.
-- No contact form, no analytics, no cookie banner in v1. Privacy notice: `[PENDING: owner input]` (confirm whether one is required if no data is collected).
+- No contact form, no analytics, no cookie banner in v1. Privacy notice: not required in v1 because the site collects no personal data (PRD non-goals, decision 2026-10-01).
 
 ---
 
@@ -194,7 +194,7 @@ Source: none (PRD concept, PRD:91). Entirely FICTIONAL sample copy. No live trac
 **Text equivalent for the map** (visible beside/under the map, also `aria-describedby`)
 > Ilustración de una ruta de reparto de ejemplo. Un paquete sale del centro de distribución, avanza por una ruta programada y llega a su destino. Es una representación ilustrativa: no muestra envíos reales ni seguimiento en vivo.
 
-CTA under the map: Pide informes por WhatsApp. Link to the "Servicio de reparto" section.
+CTA under the map: Pida informes por WhatsApp. Link to the "Servicio de reparto" section.
 
 ---
 
@@ -203,7 +203,7 @@ CTA under the map: Pide informes por WhatsApp. Link to the "Servicio de reparto"
 - Title: **Página no encontrada**
 - Body: La página que busca no existe o fue movida. Puede volver al inicio o consultar nuestros servicios.
 - Primary CTA: Volver al inicio
-- Secondary CTA: Pide informes por WhatsApp
+- Secondary CTA: Pida informes por WhatsApp
 
 ---
 
@@ -221,14 +221,21 @@ Owner decision (2026-10-01): the PRD contact data is authoritative. The live-sit
 | Email | alexciter@live.com | alfredocervantess@live.com.mx | **Confirmed PRD (owner, 2026-10-01)** |
 | Address | Av. de los Ángeles 185, Col. San Martín Xochinahuac, Azcapotzalco, CDMX | Mar del Frío #60, Col. Ciudad Brisa, Naucalpan de Juárez, Edo. Méx. | **Confirmed PRD (owner, 2026-10-01)** |
 | Hours | Lun–Vie 09:00–18:00; Sáb 09:00–14:00 | Lun–Sáb 08:00–18:00 | **Confirmed PRD (owner, 2026-10-01)** |
-| Hero CTA | "Agendar por WhatsApp" | "Pide informes por WhatsApp" | Used PRD |
+| Hero CTA | "Agendar por WhatsApp" | "Pida informes por WhatsApp" | Used PRD |
 | Hero H1 | "Tu operación logistica..." (tuteo) | n/a | Rewritten to usted |
 | Retractilado name | "Retractilado de libros y/o cualquier producto" | "Retractilado" | Shortened per PRD |
 | FAQ answers | All 4 answered on site | Expected pending | Included as sourced, flagged for review |
 | Meta description | None | n/a | Proposed |
 | Service count | 11 | 11 | Match |
 
-### VERIFY: owner sign-off
+### Owner approvals (2026-10-01)
+
+- All former VERIFY items are approved.
+- CTA register: usted ("Pida informes por WhatsApp").
+- Logo: `images/LogoFinal.png` (PNG) is the approved master; white footer variant `assets/brand/logispack-logo-white.png` is approved for dark surfaces.
+- Photography: owner-authored AI-generated images; no third-party license required.
+
+### Former VERIFY items (approved)
 REPSE (hero eyebrow, trust, FAQ) · "25+ años" · "Personal certificado" (hero and trust) · Same-day response / "cotización sin compromiso" · Outsourcing wording · Marbetado compliance wording · "3 a 10 días hábiles" · Mention of Didi · Home meta description/descriptor · About interim text · CTA register ("Pide" vs. usted).
 
 ### PENDING: owner input
