@@ -5,7 +5,7 @@
 
 /* Default theme (primary): olive */
 :root,
-[data-theme='olive'] {
+[data-theme="olive"] {
   --color-primary: #405329;
   --color-primary-strong: #2e3d1e;
   --color-primary-soft: #f1f1e5;
@@ -24,7 +24,7 @@
 }
 
 /* Optional secondary theme: logo palette (provisional raster samples) */
-[data-theme='logo'] {
+[data-theme="logo"] {
   --color-primary: #025624;
   --color-primary-strong: #013412;
   --color-primary-soft: #bfe2fd;
@@ -43,7 +43,7 @@
 }
 
 /* Dark sections (footer, primary bands) switch the focus color */
-[data-surface='inverse'] {
+[data-surface="inverse"] {
   --color-focus: var(--color-focus-inverse);
   --focus-outline: 3px solid var(--color-focus); /* re-declared: var() resolves where declared */
 }
