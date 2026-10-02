@@ -33,12 +33,28 @@ test.describe('shell', () => {
     expect(results.violations).toEqual([]);
   });
 
-  test('has no horizontal overflow', async ({ page }) => {
-    const { scrollWidth, clientWidth } = await page.evaluate(() => ({
-      scrollWidth: document.documentElement.scrollWidth,
+  test('has no horizontal overflow', async ({ page }, testInfo) => {
+    if (testInfo.project.name === 'mobile-320') {
+      expect(page.viewportSize()?.width).toBe(320);
+    }
+    const widths = await page.evaluate(() => ({
       clientWidth: document.documentElement.clientWidth,
+      htmlScrollWidth: document.documentElement.scrollWidth,
+      bodyScrollWidth: document.body.scrollWidth,
     }));
-    expect(scrollWidth).toBeLessThanOrEqual(clientWidth);
+    expect(widths.htmlScrollWidth).toBeLessThanOrEqual(widths.clientWidth);
+    expect(widths.bodyScrollWidth).toBeLessThanOrEqual(widths.clientWidth);
+  });
+
+  test('has zero axe violations in the logo theme', async ({ page }) => {
+    await page.evaluate(() => {
+      document.documentElement.dataset['theme'] = 'logo';
+    });
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'logo');
+    const results = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
+      .analyze();
+    expect(results.violations).toEqual([]);
   });
 
   test('exposes correct contact links', async ({ page }) => {
