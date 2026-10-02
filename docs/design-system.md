@@ -79,6 +79,8 @@ Brand hex values belong **only** in a theme definition. Components, utilities, s
 /* Dark sections (footer, primary bands) switch the focus color */
 [data-surface="inverse"] {
   --color-focus: var(--color-focus-inverse);
+  /* Re-declare: --focus-outline resolves var(--color-focus) where it is defined (:root) */
+  --focus-outline: 3px solid var(--color-focus);
 }
 ```
 
