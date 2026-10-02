@@ -1,0 +1,50 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Media from '../components/Media.astro';
+import ProcessSteps from '../components/ProcessSteps.astro';
+import TrustList from '../components/TrustList.astro';
+import { photos } from '../lib/photos';
+
+const photo = photos.nosotros;
+---
+
+<BaseLayout
+  title="Nosotros | Logispack Capital Humano"
+  description="Más de 25 años de experiencia en maquila, logística y operación para diferentes industrias. Certificación REPSE."
+>
+  <section class="hero hero--page">
+    <div class:list={['container', { 'has-media': Boolean(photo) }]}>
+      <div class="hero__body">
+        <h1>Nosotros</h1>
+        <p class="lead">
+          Logispack ofrece servicios logísticos, maquila y personal
+          especializado para empresas que no pueden detener su operación. Cuenta
+          con más de 25 años de experiencia en maquila, logística y operación
+          para diferentes industrias.
+        </p>
+      </div>
+      {photo && <Media {...photo} />}
+    </div>
+  </section>
+
+  <section class="section" id="confianza" aria-labelledby="confianza-title">
+    <div class="container">
+      <h2 id="confianza-title">Por qué Logispack</h2>
+      <TrustList />
+    </div>
+  </section>
+
+  <section
+    class="section section--subtle"
+    id="proceso"
+    aria-labelledby="proceso-title"
+  >
+    <div class="container">
+      <h2 id="proceso-title">Cómo trabajamos</h2>
+      <ProcessSteps />
+    </div>
+  </section>
+
+  <CtaBand id="contacto-cta" />
+</BaseLayout>

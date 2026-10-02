@@ -1,0 +1,19 @@
+---
+import { getCollection } from 'astro:content';
+
+interface Props {
+  limit?: number;
+}
+
+const { limit } = Astro.props;
+const items = (await getCollection('faq')).slice(0, limit);
+---
+
+<div class="faq">
+  {items.map((item) => (
+    <details>
+      <summary>{item.data.question}</summary>
+      <p>{item.data.answer}</p>
+    </details>
+  ))}
+</div>

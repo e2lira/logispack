@@ -1,0 +1,55 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { contact } from '../lib/contact';
+---
+
+<BaseLayout
+  title="Contacto | Logispack"
+  description="Contacte a Logispack por WhatsApp, teléfono o correo. Lunes a sábado, 08:00 a 18:00 h."
+>
+  <section class="hero hero--page">
+    <div class="container">
+      <h1>Contacto</h1>
+      <p class="lead">
+        Contacte a Logispack por WhatsApp, teléfono o correo. {contact.hours}.
+      </p>
+      <div class="actions">
+        <a class="button" href={contact.whatsappUrl}>
+          {contact.whatsappLabel}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="canales-title">
+    <div class="container">
+      <h2 id="canales-title">Canales de contacto</h2>
+      <dl class="contact-list">
+        {contact.phones.map((phone) => (
+          <div class="card">
+            <dt>{phone.label}</dt>
+            <dd>
+              <a href={phone.href}>{phone.display}</a>
+            </dd>
+          </div>
+        ))}
+        <div class="card">
+          <dt>Correo</dt>
+          <dd>
+            <a href={`mailto:${contact.email}`}>{contact.email}</a>
+          </dd>
+        </div>
+        <div class="card">
+          <dt>Dirección</dt>
+          <dd>
+            <address>{contact.address}</address>
+          </dd>
+        </div>
+        <div class="card">
+          <dt>Horario</dt>
+          <dd>{contact.hours}</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+</BaseLayout>

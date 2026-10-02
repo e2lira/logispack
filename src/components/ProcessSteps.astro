@@ -1,0 +1,14 @@
+---
+import { getCollection } from 'astro:content';
+
+const steps = await getCollection('process');
+---
+
+<ol class="steps">
+  {steps.map((step) => (
+    <li>
+      <h3>{step.data.title}</h3>
+      <p>{step.data.copy}</p>
+    </li>
+  ))}
+</ol>

@@ -1,0 +1,45 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { getFamilyGroups } from '../../lib/catalog';
+
+const groups = await getFamilyGroups();
+---
+
+<BaseLayout
+  title="Servicios de logística, maquila y personal | Logispack"
+  description="Reparto de última milla, almacenamiento, maquila, empacado, etiquetado y reclutamiento de personal operativo."
+>
+  <section class="hero hero--page">
+    <div class="container">
+      <h1>Servicios</h1>
+      <p class="lead">
+        Reparto de última milla, almacenamiento, maquila, empacado, etiquetado y
+        reclutamiento de personal operativo.
+      </p>
+    </div>
+  </section>
+
+  {groups.map(({ family, services }, index) => (
+    <section
+      class:list={['section', { 'section--subtle': index % 2 === 1 }]}
+      aria-labelledby={`family-${family.id}`}
+    >
+      <div class="container">
+        <h2 id={`family-${family.id}`}>{family.data.name}</h2>
+        <ul class="grid grid--3">
+          {services.map((service) => (
+            <li class="card">
+              <h3>
+                <a href={`/servicios/${service.id}/`}>{service.data.name}</a>
+              </h3>
+              <p>{service.data.summary}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  ))}
+
+  <CtaBand id="contacto-cta" />
+</BaseLayout>

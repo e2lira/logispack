@@ -1,0 +1,24 @@
+---
+import { contact } from '../lib/contact';
+
+interface Props {
+  id?: string;
+}
+
+const { id } = Astro.props;
+---
+
+<section
+  class="cta-band"
+  id={id}
+  data-surface="inverse"
+  aria-labelledby={`${id ?? 'cta'}-title`}
+>
+  <div class="container">
+    <h2 id={`${id ?? 'cta'}-title`}>Contacto</h2>
+    <p>Respuesta el mismo día hábil. Cotización sin compromiso.</p>
+    <a class="button" href={contact.whatsappUrl}>
+      {contact.whatsappLabel}
+    </a>
+  </div>
+</section>

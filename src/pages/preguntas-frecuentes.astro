@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CtaBand from '../components/CtaBand.astro';
+import FaqList from '../components/FaqList.astro';
+---
+
+<BaseLayout
+  title="Preguntas frecuentes | Logispack"
+  description="Respuestas sobre REPSE, maquila, trabajo en sus instalaciones y tiempos de arranque."
+>
+  <section class="hero hero--page">
+    <div class="container">
+      <h1>Preguntas frecuentes</h1>
+      <p class="lead">
+        Respuestas sobre REPSE, maquila, trabajo en sus instalaciones y tiempos
+        de arranque.
+      </p>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="preguntas-title">
+    <div class="container">
+      <h2 id="preguntas-title">Preguntas y respuestas</h2>
+      <FaqList />
+    </div>
+  </section>
+
+  <CtaBand id="contacto-cta" />
+</BaseLayout>
