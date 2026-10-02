@@ -1,4 +1,5 @@
 ---
+import Button from '../components/Button.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { contact } from '../lib/contact';
 ---
@@ -14,9 +15,7 @@ import { contact } from '../lib/contact';
         Contacte a Logispack por WhatsApp, teléfono o correo. {contact.hours}.
       </p>
       <div class="actions">
-        <a class="button" href={contact.whatsappUrl}>
-          {contact.whatsappLabel}
-        </a>
+        <Button href={contact.whatsappUrl}>{contact.whatsappLabel}</Button>
       </div>
     </div>
   </section>

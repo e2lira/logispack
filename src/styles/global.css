@@ -80,9 +80,10 @@ a {
 .button {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  gap: var(--space-3);
   min-height: var(--tap-min);
-  padding: var(--space-2) var(--space-6);
+  padding: var(--space-2) var(--space-4) var(--space-2) var(--space-6);
   border: 2px solid transparent;
   border-radius: var(--radius-sm);
   background: var(--olive-900);
@@ -117,6 +118,50 @@ a {
 
 [data-surface="inverse"] .button:hover {
   background: var(--olive-100);
+}
+
+/* Inline Phosphor icons (decorative, colored by currentColor) */
+.icon {
+  flex: none;
+  width: 24px;
+  height: 24px;
+}
+
+.icon--sm {
+  width: 20px;
+  height: 20px;
+}
+
+/* Icon disc */
+.disc {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: var(--icon-disc);
+  height: var(--icon-disc);
+  border-radius: 50%;
+  color: var(--on-olive);
+}
+
+.disc--deep {
+  background: var(--olive-900);
+}
+
+/* Informational note: ink text on surface-sunken (ink-muted is too faint here) */
+.info-note {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-block-start: var(--space-6);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--surface-sunken);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.info-note p {
+  margin: 0;
 }
 
 .actions {
@@ -314,11 +359,6 @@ h3 {
   margin: 0 0 var(--space-6);
   font-size: 1.0625rem;
   line-height: 1.36;
-}
-
-.hero .note {
-  margin: var(--space-4) 0 0;
-  font-weight: 600;
 }
 
 @media (min-width: 48rem) {

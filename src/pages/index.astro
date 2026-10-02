@@ -1,7 +1,9 @@
 ---
+import Button from '../components/Button.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CtaBand from '../components/CtaBand.astro';
 import FaqList from '../components/FaqList.astro';
+import InfoNote from '../components/InfoNote.astro';
 import Media from '../components/Media.astro';
 import ProcessSteps from '../components/ProcessSteps.astro';
 import TrustList from '../components/TrustList.astro';
@@ -29,16 +31,14 @@ const heroPhoto = photos.hero;
           controlado. Su producto sale a tiempo y llega listo para exhibirse.
         </p>
         <div class="actions">
-          <a class="button" href={contact.whatsappUrl}>
-            {contact.whatsappLabel}
-          </a>
-          <a class="button button--outline" href="/servicios/">
+          <Button href={contact.whatsappUrl}>{contact.whatsappLabel}</Button>
+          <Button href="/servicios/" variant="outline">
             Ver servicios
-          </a>
+          </Button>
         </div>
-        <p class="note">
+        <InfoNote>
           Respuesta el mismo día hábil. Cotización sin compromiso.
-        </p>
+        </InfoNote>
       </div>
       {heroPhoto && <Media {...heroPhoto} loading="eager" />}
     </div>

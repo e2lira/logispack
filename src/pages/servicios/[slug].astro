@@ -1,4 +1,5 @@
 ---
+import Button from '../../components/Button.astro';
 import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
@@ -39,9 +40,7 @@ const family = await getEntry('families', service.data.family);
       <h1>{service.data.name}</h1>
       <p class="lead">{service.data.summary}</p>
       <div class="actions">
-        <a class="button" href={contact.whatsappUrl}>
-          {contact.whatsappLabel}
-        </a>
+        <Button href={contact.whatsappUrl}>{contact.whatsappLabel}</Button>
       </div>
     </div>
   </section>
