@@ -1,0 +1,51 @@
+# ADR 0002: Implementation stack
+
+- **Status:** Accepted
+- **Date:** 2026-10-01
+- **Related:** `docs/PRD-logispack-uiux.md`, `docs/design-system.md`, `docs/0001-interactive-card-motion.md`, `docs/executable-task-plan.md`
+
+## Context
+
+Logispack v1 is a content marketing site with no backend, no contact form, no analytics, and no cookies (PRD non-goals). The only rich interaction is the illustrative route map (RFC 0001). The site must meet WCAG 2.2 AA, work at 320px, degrade without JavaScript, and collect no personal data.
+
+## Decision
+
+| Concern | Choice | Rationale |
+|---|---|---|
+| Framework | Astro (current stable), static output (`output: 'static'`) | HTML-first; ships zero JavaScript by default; islands for the route map only |
+| Language | TypeScript, `strict` mode | Typed content collections and component props |
+| Styling | Plain CSS with custom properties (`src/styles/tokens.css`) | Semantic tokens from `docs/design-system.md`; no CSS framework required |
+| Interactivity | Vanilla TypeScript island for the route map (no UI framework) | Smallest bundle; RFC 0001 behavior needs no framework |
+| Content | Astro content collections (Markdown/JSON in repo) | Copy reviewed through PRs; no CMS in v1 |
+| Fonts | Self-hosted (`@fontsource` or local `woff2`) | No third-party requests; preserves the no-data-collection decision |
+| Package manager | pnpm | Fast, strict dependency resolution |
+| Runtime | Node.js active LTS, pinned in `.nvmrc` and `package.json#engines` | Reproducible builds |
+| Unit tests | Vitest | Token, content, and pure-logic tests |
+| E2E / a11y tests | Playwright + `@axe-core/playwright` | Deterministic 320px, keyboard, pointer, touch, Escape, and reduced-motion tests required by RFC 0001 |
+| Lint / format | ESLint (`eslint-plugin-astro`, `eslint-plugin-jsx-a11y`) + Prettier | Consistent code and static a11y checks |
+| CI | GitHub Actions: install → lint → typecheck (`astro check`) → unit → build → e2e/a11y | Required PR gate |
+| Hosting | HostingMX shared hosting; manual SFTP upload of the built `dist/` folder | Owner-managed; no build runs on the server |
+| Domain | `https://logispack.capitalhumano.com.mx` (set as Astro `site`) | Canonical URLs, sitemap, and Open Graph tags derive from it |
+
+## Constraints
+
+- No third-party scripts, embeds, fonts, or map tiles.
+- Every page must render its full content without JavaScript; the route map island enhances a static text equivalent.
+- Strict TDD: each behavior starts with a failing test.
+
+## Consequences
+
+- Positive: minimal JavaScript, simple hosting, low maintenance, easy a11y/performance compliance.
+- Negative: copy edits require a repository change (no CMS); acceptable for v1.
+
+## Deployment
+
+1. CI builds and tests every PR; `main` must be green before a release.
+2. Release: run `pnpm build` locally (or download the CI `dist` artifact) and upload the contents of `dist/` to the subdomain's document root via SFTP, replacing the previous release.
+3. Use Astro `build.format: 'directory'` so every route is a folder with `index.html` and works on any static server without rewrites.
+4. Ship a `public/.htaccess` (if the server is Apache, verify with HostingMX) for HTTPS redirect, the custom `404.html`, and long-lived caching of hashed `/_astro/` assets.
+5. Keep the previous `dist/` copy locally for a manual rollback.
+
+## Open questions
+
+1. Confirm the HostingMX web server (Apache vs LiteSpeed/Nginx), the document root for the subdomain, and that an SSL certificate is issued for `logispack.capitalhumano.com.mx`.
