@@ -31,17 +31,7 @@ test.describe('every route', () => {
         await page.goto(route);
       });
 
-      test('has zero axe violations in the olive theme', async ({ page }) => {
-        const results = await new AxeBuilder({ page })
-          .withTags(AXE_TAGS)
-          .analyze();
-        expect(results.violations).toEqual([]);
-      });
-
-      test('has zero axe violations in the logo theme', async ({ page }) => {
-        await page.evaluate(() => {
-          document.documentElement.dataset['theme'] = 'logo';
-        });
+      test('has zero axe violations', async ({ page }) => {
         const results = await new AxeBuilder({ page })
           .withTags(AXE_TAGS)
           .analyze();

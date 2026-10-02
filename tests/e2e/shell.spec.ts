@@ -54,18 +54,26 @@ test.describe('shell', () => {
     await expect(img).toHaveAttribute('height', /\d+/);
   });
 
-  test('focus-visible uses the focus outline token', async ({ page }) => {
+  test('focus-visible draws a 2px forest inner outline plus a 3px yellow outer ring', async ({
+    page,
+  }) => {
     await page.keyboard.press('Tab');
     await page.keyboard.press('Tab');
-    const outline = await page.evaluate(() => {
+    const ring = await page.evaluate(() => {
       const style = getComputedStyle(document.activeElement as Element);
       return {
         width: style.outlineWidth,
         style: style.outlineStyle,
+        color: style.outlineColor,
         offset: style.outlineOffset,
+        shadow: style.boxShadow,
       };
     });
-    expect(outline).toEqual({ width: '3px', style: 'solid', offset: '2px' });
+    expect(ring.width).toBe('2px');
+    expect(ring.style).toBe('solid');
+    expect(ring.color).toBe('rgb(20, 84, 40)');
+    expect(ring.offset).toBe('0px');
+    expect(ring.shadow).toContain('rgb(252, 212, 12) 0px 0px 0px 5px');
   });
 
   test('focus ring is white on the inverse footer', async ({ page }) => {

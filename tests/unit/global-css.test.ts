@@ -33,11 +33,53 @@ describe('global.css', () => {
     const section = css.match(
       /\.site-nav a\[aria-current="true"\]\s*\{([^}]*)\}/,
     );
-    expect(page?.[1]).toMatch(
-      /border-block-end-color:\s*var\(--color-primary\)/,
-    );
-    expect(section?.[1]).toMatch(/color:\s*var\(--color-primary\)/);
+    expect(page?.[1]).toMatch(/border-block-end-color:\s*var\(--olive-900\)/);
+    expect(page?.[1]).toMatch(/color:\s*var\(--ink\)/);
+    expect(section?.[1]).toMatch(/color:\s*var\(--ink\)/);
     expect(section?.[1]).toMatch(/border-block-end-style:\s*dashed/);
     expect(section?.[1]).not.toEqual(page?.[1]);
+  });
+
+  it('uses a 4px olive-900 underline for the current nav link', () => {
+    expect(css).toMatch(/\.site-nav a\s*\{[^}]*border-block-end:\s*4px solid/);
+  });
+
+  it('only references design-system token names (no legacy --color-* tokens)', () => {
+    expect(css).not.toMatch(/var\(--color-/);
+    expect(css).not.toMatch(/data-theme/);
+  });
+
+  it('draws focus with a forced-colors-safe outline plus the yellow outer ring', () => {
+    const rule = css.match(/(?:^|\n):focus-visible\s*\{([^}]*)\}/);
+    expect(rule?.[1]).toMatch(/outline:\s*2px solid var\(--focus-inner\)/);
+    expect(rule?.[1]).toMatch(/outline-offset:\s*0/);
+    expect(rule?.[1]).toMatch(/box-shadow:\s*0 0 0 5px var\(--focus-ring\)/);
+  });
+
+  it('never uses olive-300 for borders or logo-red for text', () => {
+    const rules = css.replace(/\/\*[\s\S]*?\*\//g, '');
+    expect(rules).not.toMatch(/border[^;{}]*olive-300/);
+    expect(rules).not.toMatch(/(?<![-\w])color:\s*var\(--logo-red\)/);
+  });
+
+  it('gives secondary buttons an olive-700 border', () => {
+    expect(css).toMatch(
+      /\.button--outline\s*\{[^}]*border-color:\s*var\(--olive-700\)/,
+    );
+  });
+
+  it('keeps tap targets at the tap-min token', () => {
+    expect(css).toMatch(/\.button\s*\{[^}]*min-height:\s*var\(--tap-min\)/);
+    expect(css).toMatch(/\.site-nav a\s*\{[^}]*min-height:\s*var\(--tap-min\)/);
+  });
+
+  it('declares transitions and transforms only when motion is allowed', () => {
+    const withoutMotionBlock = css.replace(
+      /@media \(prefers-reduced-motion: no-preference\)\s*\{(?:[^{}]*\{[^{}]*\})*[^{}]*\}/g,
+      '',
+    );
+    expect(withoutMotionBlock).not.toMatch(/\btransition\s*:/);
+    expect(withoutMotionBlock).not.toMatch(/\btransform\s*:/);
+    expect(css).toMatch(/prefers-reduced-motion: no-preference/);
   });
 });
