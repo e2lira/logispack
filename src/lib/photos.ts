@@ -16,7 +16,7 @@ export type PhotoSlot = 'hero' | 'nosotros';
  * source photos are low resolution: size every slot at or below its native width.
  */
 export const photos: Partial<Record<PhotoSlot, Photo>> = {
-  // Native size 380x342: never render this slot wider than 380px.
+  // Native size 380x330: never render this slot wider than 380px.
   hero: {
     image: courierHero,
     alt: 'Repartidor de Logispack con un paquete frente al Ángel de la Independencia',
