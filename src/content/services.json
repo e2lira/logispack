@@ -1,0 +1,124 @@
+[
+  {
+    "id": "capital-humano",
+    "family": "personal-y-talento",
+    "name": "Capital Humano",
+    "summary": "Reclutamiento, selección, capacitación y administración de personal operativo y administrativo.",
+    "scope": [
+      "Reclutamiento y selección",
+      "Capacitación",
+      "Administración de personal operativo",
+      "Administración de personal administrativo"
+    ]
+  },
+  {
+    "id": "outsourcing",
+    "family": "personal-y-talento",
+    "name": "Outsourcing",
+    "summary": "Ejecución de procesos operativos con personal, supervisión y administración a cargo de Logispack.",
+    "scope": [
+      "Procesos operativos ejecutados por Logispack",
+      "Personal a cargo de Logispack",
+      "Supervisión",
+      "Administración"
+    ]
+  },
+  {
+    "id": "headhunter",
+    "family": "personal-y-talento",
+    "name": "Headhunter",
+    "summary": "Reclutamiento y selección especializada para perfiles operativos, técnicos y de mando.",
+    "scope": [
+      "Perfiles operativos",
+      "Perfiles técnicos",
+      "Perfiles de mando",
+      "Selección especializada"
+    ]
+  },
+  {
+    "id": "servicio-de-reparto",
+    "family": "logistica-y-ultima-milla",
+    "name": "Servicio de reparto",
+    "summary": "Reparto de última milla en ruta programada, con evidencia de entrega.",
+    "scope": ["Última milla", "Ruta programada", "Evidencia de entrega"]
+  },
+  {
+    "id": "delivery",
+    "family": "logistica-y-ultima-milla",
+    "name": "Delivery",
+    "summary": "Personal de reparto reclutado, capacitado y administrado para plataformas de delivery como Didi.",
+    "scope": [
+      "Reclutamiento de personal de reparto",
+      "Capacitación",
+      "Administración",
+      "Para plataformas de delivery"
+    ]
+  },
+  {
+    "id": "almacenamiento",
+    "family": "logistica-y-ultima-milla",
+    "name": "Almacenamiento",
+    "summary": "Resguardo de mercancía en racks, con control de inventario y registro de entradas y salidas.",
+    "scope": [
+      "Resguardo en racks",
+      "Control de inventario",
+      "Registro de entradas y salidas"
+    ]
+  },
+  {
+    "id": "servicio-de-maquila",
+    "family": "maquila-y-fulfillment",
+    "name": "Servicio de Maquila",
+    "summary": "Plastiflechado, emplayado, enganchado, armado de cajas y otros procesos de acondicionamiento.",
+    "scope": [
+      "Plastiflechado",
+      "Emplayado",
+      "Enganchado",
+      "Armado de cajas",
+      "Otros procesos de acondicionamiento"
+    ]
+  },
+  {
+    "id": "empacado",
+    "family": "maquila-y-fulfillment",
+    "name": "Empacado",
+    "summary": "Empaque manual y semiautomático de producto terminado con control de calidad por lote.",
+    "scope": [
+      "Empaque manual",
+      "Empaque semiautomático",
+      "Producto terminado",
+      "Control de calidad por lote"
+    ]
+  },
+  {
+    "id": "retractilado",
+    "family": "maquila-y-fulfillment",
+    "name": "Retractilado",
+    "summary": "Termoencogido de charolas, multipacks y displays con acabado firme y presentable.",
+    "scope": ["Charolas", "Multipacks", "Displays"]
+  },
+  {
+    "id": "marbetado",
+    "family": "maquila-y-fulfillment",
+    "name": "Marbetado",
+    "summary": "Aplicación de marbetes conforme a la normativa aplicable, con trazabilidad.",
+    "scope": [
+      "Marbetes",
+      "Cumplimiento de la normativa aplicable",
+      "Trazabilidad"
+    ]
+  },
+  {
+    "id": "etiquetado",
+    "family": "maquila-y-fulfillment",
+    "name": "Etiquetado",
+    "summary": "Aplicación de etiquetas de precio, código de barras, lote, caducidad y otras especificaciones.",
+    "scope": [
+      "Precio",
+      "Código de barras",
+      "Lote",
+      "Caducidad",
+      "Otras especificaciones"
+    ]
+  }
+]

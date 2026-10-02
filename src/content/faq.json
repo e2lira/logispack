@@ -1,0 +1,22 @@
+[
+  {
+    "id": "repse",
+    "question": "¿Qué es la certificación REPSE y por qué importa?",
+    "answer": "Es el registro ante la STPS que autoriza prestar servicios especializados. Contratar a un proveedor registrado protege a su empresa de responsabilidad solidaria y permite deducir el servicio."
+  },
+  {
+    "id": "volumen-minimo-maquila",
+    "question": "¿Cuál es el volumen mínimo para maquila?",
+    "answer": "Se trabaja por proyecto. Se evalúan volumen, tiempos y complejidad, y se indica con claridad si conviene realizar el trabajo en la planta del cliente o en las instalaciones de Logispack."
+  },
+  {
+    "id": "trabajo-en-sus-instalaciones",
+    "question": "¿Pueden trabajar dentro de mis instalaciones?",
+    "answer": "Sí. Se puede operar in-house con personal de Logispack o recibir el producto en el almacén, según convenga al proceso."
+  },
+  {
+    "id": "tiempo-de-arranque",
+    "question": "¿En cuánto tiempo pueden arrancar?",
+    "answer": "La mayoría de los proyectos arranca entre 3 y 10 días hábiles después de aprobar la propuesta, según el perfil y la cantidad de personal."
+  }
+]

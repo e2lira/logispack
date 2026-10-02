@@ -1,0 +1,22 @@
+[
+  {
+    "id": "diagnostico",
+    "title": "Diagnóstico",
+    "copy": "Escuchamos su necesidad, volúmenes y tiempos. Visitamos la planta si hace falta."
+  },
+  {
+    "id": "propuesta",
+    "title": "Propuesta",
+    "copy": "Definimos alcance, personal, materiales y costo en una propuesta clara."
+  },
+  {
+    "id": "arranque",
+    "title": "Arranque",
+    "copy": "Integramos al personal, capacitamos y ponemos en marcha la operación."
+  },
+  {
+    "id": "seguimiento",
+    "title": "Seguimiento",
+    "copy": "Medimos, reportamos y ajustamos para mantener el estándar mes a mes."
+  }
+]

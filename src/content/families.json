@@ -1,0 +1,9 @@
+[
+  { "id": "personal-y-talento", "name": "Personal y talento", "order": 1 },
+  {
+    "id": "logistica-y-ultima-milla",
+    "name": "Logística y última milla",
+    "order": 2
+  },
+  { "id": "maquila-y-fulfillment", "name": "Maquila y fulfillment", "order": 3 }
+]
