@@ -1,0 +1,25 @@
+---
+import Icon from './Icon.astro';
+import Media from './Media.astro';
+import type { FamilyVisual } from '../lib/family-visuals';
+
+interface Props {
+  title: string;
+  visual: FamilyVisual;
+}
+
+const { title, visual } = Astro.props;
+---
+
+<article class="feature">
+  <Media {...visual.photo} sizes="(min-width: 56rem) 33vw, 447px" />
+  <div class="feature__body">
+    <div class="feature__head">
+      <span class={`disc disc--lg disc--${visual.tone}`}>
+        <Icon name={visual.icon} />
+      </span>
+      <h3>{title}</h3>
+    </div>
+    <slot />
+  </div>
+</article>

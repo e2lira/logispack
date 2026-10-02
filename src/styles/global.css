@@ -147,6 +147,25 @@ a {
   background: var(--olive-900);
 }
 
+.disc--olive {
+  background: var(--olive-500);
+}
+
+/* Icons only: logo-red is 4.1:1, never used for text below 24px */
+.disc--red {
+  background: var(--logo-red);
+}
+
+.disc--lg {
+  width: var(--icon-disc-l);
+  height: var(--icon-disc-l);
+}
+
+.disc--lg .icon {
+  width: 28px;
+  height: 28px;
+}
+
 /* Informational note: ink text on surface-sunken (ink-muted is too faint here) */
 .info-note {
   display: flex;
@@ -240,6 +259,26 @@ a {
   color: var(--ink);
 }
 
+@media (min-width: 64rem) {
+  .site-header .container {
+    flex-wrap: nowrap;
+    gap: var(--space-8);
+  }
+
+  .site-nav {
+    flex: 1;
+    order: 2;
+  }
+
+  .site-nav ul {
+    justify-content: center;
+  }
+
+  .site-header .container > .button {
+    order: 3;
+  }
+}
+
 /* Layout primitives */
 .section {
   padding-block: var(--space-8);
@@ -316,19 +355,6 @@ h3 {
   line-height: 1.36;
 }
 
-.link-list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.link-list a {
-  display: inline-flex;
-  align-items: center;
-  min-height: var(--tap-min);
-  font-weight: 600;
-}
-
 .section a:not(.button) {
   text-underline-offset: 0.2em;
 }
@@ -352,6 +378,12 @@ h3 {
   line-height: 1.06;
   font-weight: 700;
   letter-spacing: -0.01em;
+}
+
+/* Second display line in olive-500: allowed only because it is 36px+ (3.8:1 on surface) */
+.hero h1 span {
+  display: block;
+  color: var(--olive-500);
 }
 
 .hero .lead {
@@ -399,9 +431,15 @@ h3 {
   align-items: center;
 }
 
-@media (min-width: 48rem) {
+/* Hero photo: native width is 380px, so the slot never grows past it */
+.hero .media {
+  max-width: 380px;
+  justify-self: center;
+}
+
+@media (min-width: 64rem) {
   .hero .container.has-media {
-    grid-template-columns: 1fr auto;
+    grid-template-columns: 1fr 380px;
   }
 }
 
@@ -421,6 +459,132 @@ h3 {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+/*
+ * Feature card (service families). The photos are low resolution (447-455px
+ * wide), so cards are capped at 447px (the narrowest photo) and the grid only goes 3-up when each
+ * card is narrower than that.
+ */
+.feature-grid {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.feature {
+  width: 100%;
+  max-width: 447px;
+  margin-inline: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-card);
+}
+
+.feature .media {
+  aspect-ratio: 447 / 164;
+  border-end-start-radius: 0;
+  border-end-end-radius: 0;
+}
+
+.feature__body {
+  padding: var(--space-4) var(--space-4) var(--space-2);
+}
+
+.feature__head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-block-end: var(--space-2);
+}
+
+.feature__links {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.feature__links li + li {
+  border-block-start: 1px solid var(--border);
+}
+
+.feature-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-height: var(--tap-min);
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.feature-link:hover {
+  color: var(--olive-700);
+  text-decoration: underline;
+}
+
+@media (min-width: 56rem) {
+  .feature-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: start;
+  }
+}
+
+/* Service list rows (services index): the whole row is clickable via the link */
+.rows {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  min-height: 64px;
+  padding: var(--space-3) var(--space-4) var(--space-3) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-card);
+}
+
+.row__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.row h3 {
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.row p {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 0.875rem;
+  line-height: 1.36;
+}
+
+.row__link {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.row__link:hover {
+  color: var(--olive-700);
+  text-decoration: underline;
+}
+
+.row__link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-md);
 }
 
 /* Breadcrumb */
@@ -504,12 +668,19 @@ h3 {
 }
 
 .check-list li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
   padding: var(--space-3) var(--space-4);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   background: var(--surface-raised);
   box-shadow: var(--shadow-card);
   font-weight: 600;
+}
+
+.check-list .icon {
+  color: var(--olive-700);
 }
 
 /* FAQ (native disclosure) */
@@ -673,6 +844,18 @@ h3 {
  * (survives forced-colors mode) plus a 3px outer ring drawn as a box-shadow.
  */
 :focus-visible {
+  outline: 2px solid var(--focus-inner);
+  outline-offset: 0;
+  box-shadow: 0 0 0 5px var(--focus-ring);
+}
+
+/* Stretched row links draw their focus ring around the whole row */
+.row__link:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.row__link:focus-visible::after {
   outline: 2px solid var(--focus-inner);
   outline-offset: 0;
   box-shadow: 0 0 0 5px var(--focus-ring);

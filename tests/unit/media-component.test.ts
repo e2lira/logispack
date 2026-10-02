@@ -37,3 +37,17 @@ describe('Media.astro (real component output)', () => {
     await expect(render({ image: logo, alt: '  ' })).rejects.toThrow(/alt/);
   });
 });
+
+describe('Media.astro priority hints', () => {
+  it('forwards fetchpriority and eager loading for the LCP image', async () => {
+    const html = await render({
+      image: logo,
+      alt: 'Repartidor de Logispack',
+      loading: 'eager',
+      fetchpriority: 'high',
+    });
+    const img = html.match(/<img[^>]*>/)?.[0] ?? '';
+    expect(img).toContain('loading="eager"');
+    expect(img).toContain('fetchpriority="high"');
+  });
+});

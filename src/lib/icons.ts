@@ -1,13 +1,21 @@
 import caretRight from '@phosphor-icons/core/assets/regular/caret-right.svg?raw';
+import check from '@phosphor-icons/core/assets/regular/check.svg?raw';
 import info from '@phosphor-icons/core/assets/regular/info.svg?raw';
+import mapPin from '@phosphor-icons/core/assets/regular/map-pin.svg?raw';
+import packageIcon from '@phosphor-icons/core/assets/regular/package.svg?raw';
+import users from '@phosphor-icons/core/assets/regular/users.svg?raw';
 
 /**
  * Phosphor Icons (MIT), Regular weight, inlined at build time. Register an icon
  * here only when a component uses it, so no unused SVG ships.
  */
 const icons = {
+  check,
   'caret-right': caretRight,
   info,
+  'map-pin': mapPin,
+  package: packageIcon,
+  users,
 } as const;
 
 export type IconName = keyof typeof icons;

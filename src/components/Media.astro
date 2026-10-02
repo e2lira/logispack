@@ -4,9 +4,10 @@ import { resolveMedia, type MediaInput } from '../lib/media';
 
 interface Props extends MediaInput {
   loading?: 'eager' | 'lazy';
+  fetchpriority?: 'high' | 'low' | 'auto';
 }
 
-const { loading = 'lazy', ...input } = Astro.props;
+const { loading = 'lazy', fetchpriority, ...input } = Astro.props;
 const media = resolveMedia(input);
 ---
 
@@ -19,5 +20,6 @@ const media = resolveMedia(input);
     sizes={media.sizes}
     formats={media.formats}
     loading={loading}
+    fetchpriority={fetchpriority}
   />
 </figure>
