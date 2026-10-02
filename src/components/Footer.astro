@@ -1,0 +1,44 @@
+---
+import { Image } from 'astro:assets';
+import logoWhite from '../assets/logo-white.png';
+import { contact } from '../lib/contact';
+---
+
+<footer class="site-footer" data-surface="inverse">
+  <div class="container">
+    <div>
+      <Image
+        src={logoWhite}
+        alt="Logispack Capital Humano"
+        width={160}
+        height={80}
+        loading="lazy"
+      />
+      <p>{contact.descriptor}</p>
+    </div>
+    <div>
+      <h2>Contacto</h2>
+      <ul>
+        {contact.phones.map((phone) => (
+          <li>
+            {phone.label}: <a href={phone.href}>{phone.display}</a>
+          </li>
+        ))}
+        <li>
+          Correo: <a href={`mailto:${contact.email}`}>{contact.email}</a>
+        </li>
+      </ul>
+      <p>
+        <a class="button" href={contact.whatsappUrl}>
+          {contact.whatsappLabel}
+        </a>
+      </p>
+    </div>
+    <div>
+      <h2>Ubicación y horario</h2>
+      <address>{contact.address}</address>
+      <p>{contact.hours}</p>
+    </div>
+    <p class="legal">{contact.legal}</p>
+  </div>
+</footer>

@@ -1,0 +1,22 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../assets/logo.png';
+import { contact } from '../lib/contact';
+---
+
+<header class="site-header">
+  <div class="container">
+    <a href="/" aria-label="Logispack Capital Humano, inicio">
+      <Image
+        src={logo}
+        alt="Logispack Capital Humano"
+        width={160}
+        height={80}
+        loading="eager"
+      />
+    </a>
+    <a class="button" href={contact.whatsappUrl}>
+      {contact.whatsappLabel}
+    </a>
+  </div>
+</header>

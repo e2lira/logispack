@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { contact } from '../lib/contact';
+---
+
+<BaseLayout
+  title="Logispack | Logística, maquila y personal especializado"
+  description={contact.descriptor}
+>
+  <section class="hero">
+    <div class="container">
+      <p class="eyebrow">Servicios logísticos y maquila</p>
+      <h1>Su operación logística, resuelta de principio a fin</h1>
+      <a class="button" href={contact.whatsappUrl}>
+        {contact.whatsappLabel}
+      </a>
+    </div>
+  </section>
+</BaseLayout>

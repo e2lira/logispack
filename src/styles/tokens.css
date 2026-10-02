@@ -1,0 +1,73 @@
+/*
+ * Semantic design tokens. Brand hex values live ONLY in theme definitions.
+ * Source of truth: docs/design-system.md
+ */
+
+/* Default theme (primary): olive */
+:root,
+[data-theme="olive"] {
+  --color-primary: #405329;
+  --color-primary-strong: #2e3d1e;
+  --color-primary-soft: #f1f1e5;
+  --color-secondary: #a3a263; /* decorative fills only */
+  --color-secondary-strong: #6b6b3a;
+  --color-accent: #d9343a;
+  --color-surface: #ffffff;
+  --color-surface-subtle: #f8f8f3;
+  --color-on-primary: #ffffff;
+  --color-ink: #1c2613;
+  --color-ink-muted: #536047;
+  --color-border: #d8d9bd; /* decorative only */
+  --color-border-strong: #8a8b5a;
+  --color-focus: #1c2613;
+  --color-focus-inverse: #ffffff;
+}
+
+/* Optional secondary theme: logo palette (provisional raster samples) */
+[data-theme="logo"] {
+  --color-primary: #025624;
+  --color-primary-strong: #013412;
+  --color-primary-soft: #bfe2fd;
+  --color-secondary: #0041af;
+  --color-secondary-strong: #0041af;
+  --color-accent: #f90820; /* non-text and large text only */
+  --color-surface: #ffffff;
+  --color-surface-subtle: #f5f8fb;
+  --color-on-primary: #ffffff;
+  --color-ink: #013412;
+  --color-ink-muted: #4f6b8a;
+  --color-border: #c5d3e3; /* decorative only */
+  --color-border-strong: #6e8099;
+  --color-focus: #013412;
+  --color-focus-inverse: #ffffff;
+}
+
+/* Dark sections (footer, primary bands) switch the focus color */
+[data-surface="inverse"] {
+  --color-focus: var(--color-focus-inverse);
+  --focus-outline: 3px solid var(--color-focus); /* re-declared: var() resolves where declared */
+}
+
+:root {
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  --radius-sm: 0.5rem;
+  --radius-md: 0.875rem;
+  --radius-lg: 1.25rem;
+  --radius-pill: 999px;
+
+  --shadow-card: 0 12px 32px
+    color-mix(in srgb, var(--color-ink) 10%, transparent);
+  --shadow-card-hover: 0 18px 44px
+    color-mix(in srgb, var(--color-primary) 16%, transparent);
+  --container-max: 75rem;
+  --focus-outline: 3px solid var(--color-focus);
+  --focus-offset: 2px;
+}
