@@ -127,6 +127,9 @@ describe.each(Object.entries(themes))('%s theme', (themeName, tokens) => {
     ['ink', 'primary-soft'],
     ['ink-muted', 'surface-subtle'],
     ['secondary-strong', 'primary-soft'],
+    ['primary', 'primary-soft'],
+    ['primary', 'surface-subtle'],
+    ['ink-muted', 'surface'],
     ['on-primary', 'primary-strong'],
   ])('%s text on %s is at least 4.5:1', (fg, bg) => {
     expect(ratio(fg as string, bg as string)).toBeGreaterThanOrEqual(4.5);

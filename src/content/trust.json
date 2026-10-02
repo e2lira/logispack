@@ -1,0 +1,32 @@
+[
+  {
+    "id": "experiencia",
+    "title": "25+ años de experiencia",
+    "copy": "Experiencia en servicios de maquila, logística y operación para diferentes industrias."
+  },
+  {
+    "id": "repse",
+    "title": "Certificación REPSE",
+    "copy": "Cumplimiento vigente ante la STPS para operar servicios especializados."
+  },
+  {
+    "id": "personal-certificado",
+    "title": "Personal certificado",
+    "copy": "Equipos capacitados en manejo de producto, seguridad e higiene y estándares de calidad."
+  },
+  {
+    "id": "servicios-premium",
+    "title": "Servicios premium",
+    "copy": "Acabados de maquila que llegan al piso de venta listos para exhibirse."
+  },
+  {
+    "id": "atencion-personalizada",
+    "title": "Atención personalizada",
+    "copy": "Un responsable de cuenta que conoce su operación y responde el mismo día."
+  },
+  {
+    "id": "operacion-sin-friccion",
+    "title": "Operación sin fricciones",
+    "copy": "Procesos documentados y reportes claros para que su equipo deje de apagar incendios."
+  }
+]

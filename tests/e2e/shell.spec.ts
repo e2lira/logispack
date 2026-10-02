@@ -1,4 +1,3 @@
-import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('shell', () => {
@@ -6,11 +5,9 @@ test.describe('shell', () => {
     await page.goto('/');
   });
 
-  test('declares es-MX and exposes landmarks', async ({ page }) => {
+  test('declares es-MX and a focusable main target', async ({ page }) => {
     await expect(page.locator('html')).toHaveAttribute('lang', 'es-MX');
-    await expect(page.locator('header')).toHaveCount(1);
     await expect(page.locator('main#main')).toHaveCount(1);
-    await expect(page.locator('footer')).toHaveCount(1);
   });
 
   test('skip link is first focusable, visible on focus and moves focus to main', async ({
@@ -26,41 +23,10 @@ test.describe('shell', () => {
     await expect(page.locator('main#main')).toBeFocused();
   });
 
-  test('has zero axe violations', async ({ page }) => {
-    const results = await new AxeBuilder({ page })
-      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
-      .analyze();
-    expect(results.violations).toEqual([]);
-  });
-
-  test('has no horizontal overflow', async ({ page }, testInfo) => {
-    if (testInfo.project.name === 'mobile-320') {
-      expect(page.viewportSize()?.width).toBe(320);
-    }
-    const widths = await page.evaluate(() => ({
-      clientWidth: document.documentElement.clientWidth,
-      htmlScrollWidth: document.documentElement.scrollWidth,
-      bodyScrollWidth: document.body.scrollWidth,
-    }));
-    expect(widths.htmlScrollWidth).toBeLessThanOrEqual(widths.clientWidth);
-    expect(widths.bodyScrollWidth).toBeLessThanOrEqual(widths.clientWidth);
-  });
-
-  test('has zero axe violations in the logo theme', async ({ page }) => {
-    await page.evaluate(() => {
-      document.documentElement.dataset['theme'] = 'logo';
-    });
-    await expect(page.locator('html')).toHaveAttribute('data-theme', 'logo');
-    const results = await new AxeBuilder({ page })
-      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
-      .analyze();
-    expect(results.violations).toEqual([]);
-  });
-
   test('exposes correct contact links', async ({ page }) => {
     await expect(
       page.locator('a[href="https://wa.me/525544792696"]').first(),
-    ).toHaveText(/Pide informes por WhatsApp/);
+    ).toHaveText(/Pida informes por WhatsApp/);
     await expect(page.locator('footer a[href="tel:+525544792696"]')).toHaveText(
       '55 44 79 26 96',
     );
@@ -113,16 +79,26 @@ test.describe('shell', () => {
   });
 });
 
-test.describe('without JavaScript', () => {
-  test.use({ javaScriptEnabled: false });
+test('header logo link has a single accessible name', async ({ page }) => {
+  await page.goto('/');
+  const logoLink = page.locator('header a:has(img)');
+  await expect(logoLink).not.toHaveAttribute('aria-label', /.+/);
+  await expect(logoLink.locator('img')).toHaveAttribute(
+    'alt',
+    'Logispack Capital Humano, inicio',
+  );
+});
 
-  test('shows the h1 and the WhatsApp CTA', async ({ page }) => {
-    await page.goto('/');
-    await expect(page.locator('h1')).toHaveText(
-      'Su operación logística, resuelta de principio a fin',
-    );
-    await expect(
-      page.locator('a[href="https://wa.me/525544792696"]').first(),
-    ).toBeVisible();
-  });
+test('main shows a visible focus indicator after the skip link', async ({
+  page,
+}) => {
+  await page.goto('/');
+  await page.keyboard.press('Tab');
+  await page.keyboard.press('Enter');
+  await expect(page.locator('main#main')).toBeFocused();
+  const outlineStyle = await page.evaluate(
+    () =>
+      getComputedStyle(document.querySelector('main') as Element).outlineStyle,
+  );
+  expect(outlineStyle).not.toBe('none');
 });

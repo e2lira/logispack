@@ -1,0 +1,14 @@
+---
+import { getCollection } from 'astro:content';
+
+const items = await getCollection('trust');
+---
+
+<ul class="grid grid--3">
+  {items.map((item) => (
+    <li class="card">
+      <h3>{item.data.title}</h3>
+      <p>{item.data.copy}</p>
+    </li>
+  ))}
+</ul>

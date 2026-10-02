@@ -1,0 +1,72 @@
+---
+import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import ProcessSteps from '../../components/ProcessSteps.astro';
+import { contact } from '../../lib/contact';
+
+interface Props {
+  service: CollectionEntry<'services'>;
+}
+
+export async function getStaticPaths() {
+  const services = await getCollection('services');
+  return services.map((service) => ({
+    params: { slug: service.id },
+    props: { service },
+  }));
+}
+
+const { service } = Astro.props;
+const family = await getEntry('families', service.data.family);
+---
+
+<BaseLayout
+  title={`${service.data.name} | Logispack`}
+  description={service.data.summary}
+>
+  <section class="hero hero--page">
+    <div class="container">
+      <Breadcrumb
+        items={[
+          { label: 'Inicio', href: '/' },
+          { label: 'Servicios', href: '/servicios/' },
+          { label: service.data.name },
+        ]}
+      />
+      {family && <p class="eyebrow">{family.data.name}</p>}
+      <h1>{service.data.name}</h1>
+      <p class="lead">{service.data.summary}</p>
+      <div class="actions">
+        <a class="button" href={contact.whatsappUrl}>
+          {contact.whatsappLabel}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="alcance" aria-labelledby="alcance-title">
+    <div class="container">
+      <h2 id="alcance-title">Alcance</h2>
+      <ul class="check-list">
+        {service.data.scope.map((item) => (
+          <li>{item}</li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section
+    class="section section--subtle"
+    id="proceso"
+    aria-labelledby="proceso-title"
+  >
+    <div class="container">
+      <h2 id="proceso-title">Cómo trabajamos en todos nuestros servicios</h2>
+      <ProcessSteps />
+    </div>
+  </section>
+
+  <CtaBand id="contacto-cta" />
+</BaseLayout>

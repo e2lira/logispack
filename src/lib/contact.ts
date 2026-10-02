@@ -3,13 +3,13 @@ export const contact = {
   brand: 'LOGISPACK Capital Humano',
   descriptor:
     'Servicios logísticos, maquila y personal especializado para empresas que no pueden detener su operación.',
-  whatsappLabel: 'Pide informes por WhatsApp',
+  whatsappLabel: 'Pida informes por WhatsApp',
   whatsappUrl: 'https://wa.me/525544792696',
   phones: [
     {
       display: '55 44 79 26 96',
       href: 'tel:+525544792696',
-      label: 'WhatsApp y teléfono',
+      label: 'WhatsApp',
     },
     { display: '54 44 57 58 87', href: 'tel:+525444575887', label: 'Teléfono' },
   ],
