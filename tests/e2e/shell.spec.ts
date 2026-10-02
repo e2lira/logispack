@@ -60,7 +60,7 @@ test.describe('shell', () => {
   test('exposes correct contact links', async ({ page }) => {
     await expect(
       page.locator('a[href="https://wa.me/525544792696"]').first(),
-    ).toHaveText(/Pide informes por WhatsApp/);
+    ).toHaveText(/Pida informes por WhatsApp/);
     await expect(page.locator('footer a[href="tel:+525544792696"]')).toHaveText(
       '55 44 79 26 96',
     );
@@ -125,4 +125,28 @@ test.describe('without JavaScript', () => {
       page.locator('a[href="https://wa.me/525544792696"]').first(),
     ).toBeVisible();
   });
+});
+
+test('header logo link has a single accessible name', async ({ page }) => {
+  await page.goto('/');
+  const logoLink = page.locator('header a:has(img)');
+  await expect(logoLink).not.toHaveAttribute('aria-label', /.+/);
+  await expect(logoLink.locator('img')).toHaveAttribute(
+    'alt',
+    'Logispack Capital Humano, inicio',
+  );
+});
+
+test('main shows a visible focus indicator after the skip link', async ({
+  page,
+}) => {
+  await page.goto('/');
+  await page.keyboard.press('Tab');
+  await page.keyboard.press('Enter');
+  await expect(page.locator('main#main')).toBeFocused();
+  const outlineStyle = await page.evaluate(
+    () =>
+      getComputedStyle(document.querySelector('main') as Element).outlineStyle,
+  );
+  expect(outlineStyle).not.toBe('none');
 });
