@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import logo from '../assets/logo.png';
+import logo from '../assets/brand/logispack-logo.svg';
 import { contact } from '../lib/contact';
 import { navCurrent, navItems } from '../lib/nav';
 
@@ -13,8 +13,8 @@ const currentPath = Astro.url.pathname;
       <Image
         src={logo}
         alt="Logispack Capital Humano, inicio"
-        width={160}
-        height={80}
+        width={175}
+        height={60}
         loading="eager"
       />
     </a>

@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import logoWhite from '../assets/logo-white.png';
+import logoWhite from '../assets/brand/logispack-logo-white.svg';
 import { contact } from '../lib/contact';
 ---
 
@@ -10,8 +10,9 @@ import { contact } from '../lib/contact';
       <Image
         src={logoWhite}
         alt="Logispack Capital Humano"
-        width={160}
-        height={80}
+        width={187}
+        height={64}
+        class="footer-logo"
         loading="lazy"
       />
       <p>{contact.descriptor}</p>

@@ -144,6 +144,18 @@ a {
   display: inline-block;
 }
 
+/* Vector lockup: 60px on mobile, 72px on desktop (minimum lockup width 120px) */
+.site-header .brand img {
+  width: auto;
+  height: 60px;
+}
+
+@media (min-width: 48rem) {
+  .site-header .brand img {
+    height: 72px;
+  }
+}
+
 .site-nav {
   flex-basis: 100%;
 }
@@ -555,6 +567,12 @@ h3 {
 .site-footer .container {
   display: grid;
   gap: var(--space-8);
+}
+
+.footer-logo {
+  width: auto;
+  height: 64px;
+  margin-block-end: var(--space-4);
 }
 
 .site-footer h2 {

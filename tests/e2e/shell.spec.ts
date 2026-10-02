@@ -110,3 +110,56 @@ test('main shows a visible focus indicator after the skip link', async ({
   );
   expect(outlineStyle).not.toBe('none');
 });
+
+test.describe('brand', () => {
+  test('header shows the vector lockup at 72px on desktop and 60px on mobile', async ({
+    page,
+  }, testInfo) => {
+    await page.goto('/');
+    const img = page.locator('header a.brand img');
+    await expect(img).toHaveAttribute('src', /\.svg$/);
+    const box = await img.boundingBox();
+    expect(box).not.toBeNull();
+    const expected = testInfo.project.name === 'mobile-320' ? 60 : 72;
+    expect(Math.round(box!.height)).toBe(expected);
+    expect(box!.width).toBeGreaterThanOrEqual(120);
+  });
+
+  test('footer shows the white vector lockup at 64px', async ({ page }) => {
+    await page.goto('/');
+    const img = page.locator('footer img');
+    await expect(img).toHaveAttribute('src', /\.svg$/);
+    const box = await img.boundingBox();
+    expect(Math.round(box!.height)).toBe(64);
+    expect(box!.width).toBeGreaterThanOrEqual(120);
+  });
+
+  test('footer sits on the olive-900 band', async ({ page }) => {
+    await page.goto('/');
+    const bg = await page
+      .locator('footer')
+      .evaluate((el) => getComputedStyle(el).backgroundColor);
+    expect(bg).toBe('rgb(72, 80, 40)');
+  });
+
+  test('declares an SVG favicon with a PNG fallback that is served', async ({
+    page,
+    request,
+  }) => {
+    await page.goto('/');
+    await expect(
+      page.locator('link[rel="icon"][type="image/svg+xml"]'),
+    ).toHaveCount(1);
+    const png = page.locator('link[rel="icon"][type="image/png"]');
+    await expect(png).toHaveCount(1);
+    const href = (await png.getAttribute('href')) as string;
+    const response = await request.get(href);
+    expect(response.status()).toBe(200);
+    expect(response.headers()['content-type']).toContain('image/png');
+  });
+
+  test('uses the single theme: no data-theme anywhere', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('[data-theme]')).toHaveCount(0);
+  });
+});
