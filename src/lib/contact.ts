@@ -9,7 +9,7 @@ export const contact = {
     {
       display: '55 44 79 26 96',
       href: 'tel:+525544792696',
-      label: 'WhatsApp y teléfono',
+      label: 'WhatsApp',
     },
     { display: '54 44 57 58 87', href: 'tel:+525444575887', label: 'Teléfono' },
   ],

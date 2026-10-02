@@ -211,8 +211,15 @@ main:focus-visible {
   border-block-end-color: var(--color-border-strong);
 }
 
-.site-nav a[aria-current] {
+.site-nav a[aria-current="page"] {
   border-block-end-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* Parent section (e.g. Servicios on a detail page): same color, dashed rule */
+.site-nav a[aria-current="true"] {
+  border-block-end-color: var(--color-primary);
+  border-block-end-style: dashed;
   color: var(--color-primary);
 }
 
