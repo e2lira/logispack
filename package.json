@@ -15,7 +15,7 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "test": "vitest run",
-    "test:e2e": "playwright test"
+    "test:e2e": "pnpm build && playwright test"
   },
   "dependencies": {
     "@fontsource/inter": "^5.3.0",

@@ -22,9 +22,9 @@ pnpm dev
 | `pnpm lint`     | ESLint (astro + jsx-a11y)                                          |
 | `pnpm format`   | Prettier                                                           |
 | `pnpm test`     | Unit tests (Vitest)                                                |
-| `pnpm test:e2e` | Build, preview and run Playwright e2e + axe a11y (320px + desktop) |
+| `pnpm test:e2e` | Build, then run Playwright e2e + axe a11y (320px + desktop)        |
 
-First e2e run: `pnpm exec playwright install chromium`.
+First e2e run: `pnpm exec playwright install chromium`. Playwright only serves `dist/` (`pnpm preview`); `pnpm test:e2e` rebuilds first so it never tests a stale build. CI builds once, then runs `pnpm exec playwright test`.
 
 ## Release (manual SFTP to HostingMX)
 

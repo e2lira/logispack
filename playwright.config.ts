@@ -12,7 +12,7 @@ export default defineConfig({
     : 'list',
   use: { baseURL: `http://localhost:${PORT}` },
   webServer: {
-    command: `pnpm build && pnpm preview --port ${PORT}`,
+    command: `pnpm preview --port ${PORT}`,
     url: `http://localhost:${PORT}`,
     reuseExistingServer: !process.env['CI'],
     timeout: 120_000,
