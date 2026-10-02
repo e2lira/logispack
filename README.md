@@ -13,16 +13,16 @@ pnpm install
 pnpm dev
 ```
 
-| Script          | What it does                                                       |
-| --------------- | ------------------------------------------------------------------ |
-| `pnpm dev`      | Start the dev server                                               |
-| `pnpm build`    | Build the static site into `dist/`                                 |
-| `pnpm preview`  | Serve `dist/` locally                                              |
-| `pnpm check`    | Type-check with `astro check`                                      |
-| `pnpm lint`     | ESLint (astro + jsx-a11y)                                          |
-| `pnpm format`   | Prettier                                                           |
-| `pnpm test`     | Unit tests (Vitest)                                                |
-| `pnpm test:e2e` | Build, then run Playwright e2e + axe a11y (320px + desktop)        |
+| Script          | What it does                                                |
+| --------------- | ----------------------------------------------------------- |
+| `pnpm dev`      | Start the dev server                                        |
+| `pnpm build`    | Build the static site into `dist/`                          |
+| `pnpm preview`  | Serve `dist/` locally                                       |
+| `pnpm check`    | Type-check with `astro check`                               |
+| `pnpm lint`     | ESLint (astro + jsx-a11y)                                   |
+| `pnpm format`   | Prettier                                                    |
+| `pnpm test`     | Unit tests (Vitest)                                         |
+| `pnpm test:e2e` | Build, then run Playwright e2e + axe a11y (320px + desktop) |
 
 First e2e run: `pnpm exec playwright install chromium`. Playwright only serves `dist/` (`pnpm preview`); `pnpm test:e2e` rebuilds first so it never tests a stale build. CI builds once, then runs `pnpm exec playwright test`.
 
