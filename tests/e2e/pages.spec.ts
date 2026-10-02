@@ -108,7 +108,7 @@ test.describe('without JavaScript', () => {
       'Su operación logística, resuelta de principio a fin',
     );
     await expect(
-      page.locator('a[href="https://wa.me/525544792696"]').first(),
+      page.locator('main a[href="https://wa.me/525544792696"]').first(),
     ).toBeVisible();
   });
 
@@ -379,6 +379,17 @@ test.describe('preguntas frecuentes', () => {
 });
 
 test.describe('photography', () => {
+  test('feature card photos anchor the crop to the top so faces are kept', async ({
+    page,
+  }) => {
+    await page.goto('/');
+    const imgs = page.locator('.feature .media img');
+    await expect(imgs).toHaveCount(3);
+    for (const img of await imgs.all()) {
+      await expect(img).toHaveCSS('object-position', '50% 0%');
+    }
+  });
+
   test('hero photo is the eager, high-priority LCP image', async ({ page }) => {
     await page.goto('/');
     const img = page.locator('.hero img');
@@ -437,7 +448,10 @@ test.describe('tap targets', () => {
     await page.goto('/');
     const heights = await page.$$eval(
       '.button, .site-nav a, .faq summary, .feature-link',
-      (els) => els.map((el) => el.getBoundingClientRect().height),
+      (els) =>
+        els
+          .filter((el) => el.getClientRects().length > 0)
+          .map((el) => el.getBoundingClientRect().height),
     );
     expect(heights.length).toBeGreaterThan(10);
     for (const height of heights) expect(height).toBeGreaterThanOrEqual(44);

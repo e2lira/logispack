@@ -220,6 +220,11 @@ a {
   }
 }
 
+/* The hero repeats this CTA in the first screen, so it only shows on wide screens */
+.site-header .container > .button {
+  display: none;
+}
+
 .site-nav {
   flex-basis: 100%;
 }
@@ -267,7 +272,6 @@ a {
 
   .site-nav {
     flex: 1;
-    order: 2;
   }
 
   .site-nav ul {
@@ -275,7 +279,7 @@ a {
   }
 
   .site-header .container > .button {
-    order: 3;
+    display: inline-flex;
   }
 }
 
@@ -485,6 +489,11 @@ h3 {
   aspect-ratio: 447 / 164;
   border-end-start-radius: 0;
   border-end-end-radius: 0;
+}
+
+/* Photos are people shots: anchor the crop to the top so faces are not cut */
+.feature .media img {
+  object-position: center top;
 }
 
 .feature__body {

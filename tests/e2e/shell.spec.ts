@@ -162,4 +162,77 @@ test.describe('brand', () => {
     await page.goto('/');
     await expect(page.locator('[data-theme]')).toHaveCount(0);
   });
+  test('header DOM order is brand, nav, CTA and matches visual order at desktop', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto('/');
+    const items = [
+      page.locator('.site-header .brand'),
+      page.locator('.site-header .site-nav'),
+      page.locator('.site-header .container > .button'),
+    ];
+    const boxes = [];
+    for (const item of items) {
+      await expect(item).toBeVisible();
+      const box = await item.boundingBox();
+      expect(box).not.toBeNull();
+      boxes.push(box as { x: number; y: number });
+    }
+    // DOM order (brand, nav, CTA) must be left-to-right on the same row
+    expect(boxes[0]!.x).toBeLessThan(boxes[1]!.x);
+    expect(boxes[1]!.x).toBeLessThan(boxes[2]!.x);
+    const order = await page
+      .locator('.site-header .container')
+      .evaluate((el) =>
+        Array.from(el.children).map((c) =>
+          c.classList.contains('brand')
+            ? 'brand'
+            : c.classList.contains('site-nav')
+              ? 'nav'
+              : 'cta',
+        ),
+      );
+    expect(order).toEqual(['brand', 'nav', 'cta']);
+  });
+
+  test('Tab goes through the nav links before the header CTA at desktop', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto('/');
+    await page.keyboard.press('Tab'); // skip link
+    await page.keyboard.press('Tab'); // logo
+    await expect(page.locator('.site-header .brand')).toBeFocused();
+    const navCount = await page.locator('.site-nav a').count();
+    expect(navCount).toBeGreaterThan(0);
+    for (let i = 0; i < navCount; i++) {
+      await page.keyboard.press('Tab');
+      await expect(page.locator('.site-nav a').nth(i)).toBeFocused();
+    }
+    await page.keyboard.press('Tab');
+    await expect(
+      page.locator('.site-header .container > .button'),
+    ).toBeFocused();
+  });
+
+  test('header WhatsApp CTA is visible at desktop', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto('/');
+    await expect(
+      page.locator('.site-header .container > .button'),
+    ).toBeVisible();
+  });
+
+  test('at 320px the header CTA is hidden and the hero CTA is above the fold', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 320, height: 640 });
+    await page.goto('/');
+    await expect(
+      page.locator('.site-header .container > .button'),
+    ).toBeHidden();
+    const hero = page.locator('.hero a[href^="https://wa.me/"]').first();
+    await expect(hero).toBeInViewport({ ratio: 1 });
+  });
 });

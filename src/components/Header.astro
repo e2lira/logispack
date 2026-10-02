@@ -19,7 +19,6 @@ const currentPath = Astro.url.pathname;
         loading="eager"
       />
     </a>
-    <Button href={contact.whatsappUrl}>{contact.whatsappLabel}</Button>
     <nav class="site-nav" aria-label="Principal">
       <ul>
         {navItems.map((item) => (
@@ -34,5 +33,6 @@ const currentPath = Astro.url.pathname;
         ))}
       </ul>
     </nav>
+    <Button href={contact.whatsappUrl}>{contact.whatsappLabel}</Button>
   </div>
 </header>
