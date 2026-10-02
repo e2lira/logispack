@@ -2,11 +2,14 @@
 import { Image } from 'astro:assets';
 import logo from '../assets/logo.png';
 import { contact } from '../lib/contact';
+import { navCurrent, navItems } from '../lib/nav';
+
+const currentPath = Astro.url.pathname;
 ---
 
 <header class="site-header">
   <div class="container">
-    <a href="/">
+    <a class="brand" href="/">
       <Image
         src={logo}
         alt="Logispack Capital Humano, inicio"
@@ -18,5 +21,19 @@ import { contact } from '../lib/contact';
     <a class="button" href={contact.whatsappUrl}>
       {contact.whatsappLabel}
     </a>
+    <nav class="site-nav" aria-label="Principal">
+      <ul>
+        {navItems.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              aria-current={navCurrent(item.href, currentPath)}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
   </div>
 </header>
