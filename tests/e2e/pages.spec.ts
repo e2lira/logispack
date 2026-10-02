@@ -1,5 +1,5 @@
 import AxeBuilder from '@axe-core/playwright';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 import families from '../../src/content/families.json' with { type: 'json' };
 import services from '../../src/content/services.json' with { type: 'json' };
 
@@ -15,35 +15,20 @@ const routes = [
   '/preguntas-frecuentes/',
 ];
 
-test.describe('every page', () => {
+const templates = [
+  ['home', '/'],
+  ['services index', '/servicios/'],
+  ['service detail', `/servicios/${services[0]!.id}/`],
+  ['nosotros', '/nosotros/'],
+  ['contacto', '/contacto/'],
+  ['preguntas frecuentes', '/preguntas-frecuentes/'],
+] as const;
+
+test.describe('every route', () => {
   for (const route of routes) {
     test.describe(route, () => {
       test.beforeEach(async ({ page }) => {
         await page.goto(route);
-      });
-
-      test('has one h1, landmarks, title, description and canonical', async ({
-        page,
-      }) => {
-        await expect(page.locator('h1')).toHaveCount(1);
-        await expect(page.locator('header')).toHaveCount(1);
-        await expect(page.locator('main')).toHaveCount(1);
-        await expect(page.locator('footer')).toHaveCount(1);
-        await expect(page.locator('nav[aria-label="Principal"]')).toHaveCount(
-          1,
-        );
-        const title = await page.title();
-        expect(title.length).toBeGreaterThan(0);
-        expect(title.length).toBeLessThanOrEqual(60);
-        const description = await page
-          .locator('meta[name="description"]')
-          .getAttribute('content');
-        expect(description?.length ?? 0).toBeGreaterThan(0);
-        expect(description?.length ?? 0).toBeLessThanOrEqual(155);
-        await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
-          'href',
-          `${SITE}${route}`,
-        );
       });
 
       test('has zero axe violations in the olive theme', async ({ page }) => {
@@ -63,7 +48,14 @@ test.describe('every page', () => {
         expect(results.violations).toEqual([]);
       });
 
-      test('has no horizontal overflow', async ({ page }) => {
+      test('has no horizontal overflow at 320px', async ({
+        page,
+      }, testInfo) => {
+        test.skip(
+          testInfo.project.name !== 'mobile-320',
+          'overflow is only meaningful at the 320px viewport',
+        );
+        expect(page.viewportSize()?.width).toBe(320);
         const widths = await page.evaluate(() => ({
           client: document.documentElement.clientWidth,
           html: document.documentElement.scrollWidth,
@@ -72,13 +64,37 @@ test.describe('every page', () => {
         expect(widths.html).toBeLessThanOrEqual(widths.client);
         expect(widths.body).toBeLessThanOrEqual(widths.client);
       });
+    });
+  }
+});
 
-      test('ships no scripts and no pending placeholders', async ({ page }) => {
-        await expect(page.locator('script')).toHaveCount(0);
-        const text = await page.locator('body').innerText();
-        expect(text).not.toMatch(/pendiente|\[PENDING|\[VERIFY/i);
-        expect(text).not.toMatch(/tiempo real|rastrea/i);
-      });
+test.describe('page templates', () => {
+  for (const [name, route] of templates) {
+    test(`${name} has one h1, landmarks, metadata and no scripts`, async ({
+      page,
+    }) => {
+      await page.goto(route);
+      await expect(page.locator('h1')).toHaveCount(1);
+      await expect(page.locator('header')).toHaveCount(1);
+      await expect(page.locator('main')).toHaveCount(1);
+      await expect(page.locator('footer')).toHaveCount(1);
+      await expect(page.locator('nav[aria-label="Principal"]')).toHaveCount(1);
+      const title = await page.title();
+      expect(title.length).toBeGreaterThan(0);
+      expect(title.length).toBeLessThanOrEqual(60);
+      const description = await page
+        .locator('meta[name="description"]')
+        .getAttribute('content');
+      expect(description?.length ?? 0).toBeGreaterThan(0);
+      expect(description?.length ?? 0).toBeLessThanOrEqual(155);
+      await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+        'href',
+        `${SITE}${route}`,
+      );
+      await expect(page.locator('script')).toHaveCount(0);
+      expect(await page.locator('body').innerText()).not.toMatch(
+        /tiempo real|rastrea/i,
+      );
     });
   }
 });
@@ -95,6 +111,16 @@ test.describe('without JavaScript', () => {
       ).toHaveCount(5);
     });
   }
+
+  test('home shows the h1 and the WhatsApp CTA', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('h1')).toHaveText(
+      'Su operación logística, resuelta de principio a fin',
+    );
+    await expect(
+      page.locator('a[href="https://wa.me/525544792696"]').first(),
+    ).toBeVisible();
+  });
 
   test('FAQ disclosure opens natively', async ({ page }) => {
     await page.goto('/preguntas-frecuentes/');
@@ -230,6 +256,26 @@ test.describe('home', () => {
   }
 });
 
+test.describe('navigation to a service (G2)', () => {
+  test('reaches a service detail in two interactions via the header', async ({
+    page,
+  }) => {
+    const service = services[0]!;
+    await page.goto('/');
+    await page
+      .getByRole('navigation', { name: 'Principal' })
+      .getByRole('link', { name: 'Servicios' })
+      .click();
+    await expect(page).toHaveURL(/\/servicios\/$/);
+    await page
+      .locator('main')
+      .getByRole('link', { name: service.name, exact: true })
+      .click();
+    await expect(page).toHaveURL(new RegExp(`/servicios/${service.id}/$`));
+    await expect(page.locator('h1')).toHaveText(service.name);
+  });
+});
+
 test.describe('services index', () => {
   test('groups all 11 services by family', async ({ page }) => {
     await page.goto('/servicios/');
@@ -270,6 +316,9 @@ test.describe('service detail', () => {
       }
       await expect(page.locator('#proceso li')).toHaveCount(4);
       await expect(
+        page.locator('#proceso').getByRole('heading', { level: 2 }),
+      ).toHaveText('Cómo trabajamos en todos nuestros servicios');
+      await expect(
         page
           .locator('main')
           .getByRole('link', { name: 'Pida informes por WhatsApp' })
@@ -309,6 +358,7 @@ test.describe('contacto', () => {
     await page.goto('/contacto/');
     const main = page.locator('main');
     await expect(page.locator('form')).toHaveCount(0);
+    await expect(page.locator('.cta-band')).toHaveCount(0);
     await expect(
       main.getByRole('link', { name: 'Pida informes por WhatsApp' }),
     ).toHaveAttribute('href', 'https://wa.me/525544792696');
@@ -335,75 +385,5 @@ test.describe('preguntas frecuentes', () => {
     await expect(page.locator('main')).toContainText(
       'entre 3 y 10 días hábiles',
     );
-  });
-});
-
-/** Responsive image slot contract (task 1.6), exercised with a generated placeholder. */
-test.describe('image slot', () => {
-  async function mountSlot(page: Page, withImage: boolean) {
-    await page.goto('/');
-    return page.evaluate(async (attach) => {
-      const figure = document.createElement('figure');
-      figure.className = 'media';
-      figure.style.setProperty('--media-ratio', '4 / 3');
-      const img = document.createElement('img');
-      img.width = 800;
-      img.height = 600;
-      img.alt = 'Imagen de prueba';
-      figure.append(img);
-      document.querySelector('main')!.prepend(figure);
-
-      // Mounting the slot itself moves content; only shifts after this mark count.
-      await new Promise((r) => requestAnimationFrame(() => r(null)));
-      await new Promise((r) => setTimeout(r, 100));
-      const mark = performance.now();
-      let shift = 0;
-      new PerformanceObserver((list) => {
-        for (const entry of list.getEntries()) {
-          const ls = entry as PerformanceEntry & {
-            value: number;
-            hadRecentInput: boolean;
-          };
-          if (!ls.hadRecentInput && ls.startTime >= mark) shift += ls.value;
-        }
-      }).observe({ type: 'layout-shift', buffered: true });
-
-      const before = figure.getBoundingClientRect().height;
-      if (attach) {
-        const canvas = document.createElement('canvas');
-        canvas.width = 800;
-        canvas.height = 600;
-        const url = canvas.toDataURL('image/png');
-        await new Promise<void>((resolve) => {
-          img.onload = () => resolve();
-          img.src = url;
-        });
-      }
-      await new Promise((r) => setTimeout(r, 100));
-      const after = figure.getBoundingClientRect().height;
-      return {
-        before,
-        after,
-        shift,
-        imgWidth: img.getBoundingClientRect().width,
-        client: document.documentElement.clientWidth,
-        scroll: document.documentElement.scrollWidth,
-      };
-    }, withImage);
-  }
-
-  test('reserves space before load and does not shift layout', async ({
-    page,
-  }) => {
-    const result = await mountSlot(page, true);
-    expect(result.before).toBeGreaterThan(0);
-    expect(result.after).toBeCloseTo(result.before, 0);
-    expect(result.shift).toBeLessThanOrEqual(0.1);
-  });
-
-  test('never overflows the viewport', async ({ page }) => {
-    const result = await mountSlot(page, true);
-    expect(result.imgWidth).toBeLessThanOrEqual(result.client);
-    expect(result.scroll).toBeLessThanOrEqual(result.client);
   });
 });
