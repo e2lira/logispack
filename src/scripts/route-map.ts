@@ -46,6 +46,9 @@ function enhance(root: HTMLElement): void {
   function position(): void {
     const s = stage!.getBoundingClientRect();
     const m = marker.getBoundingClientRect();
+    popup!.classList.remove('rm-pop--flow');
+    popup!.style.left = '';
+    popup!.style.top = '';
     const { offsetWidth: w, offsetHeight: h } = popup!;
     const clamp = (value: number, max: number) =>
       Math.min(Math.max(value, 0), Math.max(0, max));
@@ -56,20 +59,16 @@ function enhance(root: HTMLElement): void {
       right: s.width - (cx + m.width / 2) - GAP,
       left: cx - m.width / 2 - GAP,
     };
-    let left: number;
-    let top: number;
-    if (room.right >= w || room.left >= w) {
-      // Wide stage: sit beside the marker so the map and heading stay uncovered
-      left =
-        room.right >= w ? cx + m.width / 2 + GAP : cx - m.width / 2 - GAP - w;
-      top = clamp(cy - h / 2, s.height - h);
-    } else {
-      // Narrow stage: a sheet pinned inside the stage, on the half the marker
-      // is not in. CSS caps its height at the stage and scrolls it internally,
-      // so it never covers content outside the map.
-      left = clamp(cx - w / 2, s.width - w);
-      top = cy > s.height / 2 ? 0 : s.height - h;
+    if (room.right < w && room.left < w) {
+      // Narrow stage: no room beside the marker, so the popup sits in flow
+      // below the map instead of covering it or the text around it
+      popup!.classList.add('rm-pop--flow');
+      return;
     }
+    // Wide stage: sit beside the marker so the map and heading stay uncovered
+    const left =
+      room.right >= w ? cx + m.width / 2 + GAP : cx - m.width / 2 - GAP - w;
+    const top = clamp(cy - h / 2, s.height - h);
     popup!.style.left = `${Math.round(left)}px`;
     popup!.style.top = `${Math.round(top)}px`;
   }

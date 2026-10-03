@@ -18,6 +18,10 @@
   }
 }
 
+.rm__map {
+  position: relative;
+}
+
 .rm__stage {
   position: relative;
   aspect-ratio: 4 / 3;
@@ -82,9 +86,6 @@
   overflow: clip;
   border-radius: var(--radius-lg);
   pointer-events: none;
-  /* Above the popup: on narrow stages the popup is a sheet that spans the
-     stage, and the marker (hit target and focus ring) must stay visible */
-  z-index: 3;
 }
 
 /* The rider layer is exactly the stage box, so translate % tracks the map */
@@ -149,16 +150,20 @@ button.rm-marker:focus-visible {
   inset-inline-start: 0;
   z-index: 2;
   width: min(18rem, 100%);
-  /* Never taller than the stage: scrolls internally instead of spilling out */
-  max-height: 100%;
-  overflow-y: auto;
-  overscroll-behavior: contain;
   padding: var(--space-3) var(--space-4) var(--space-4);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   background: var(--surface-raised);
   box-shadow: var(--shadow-pop);
   color: var(--ink);
+}
+
+/* Narrow stages: the popup joins the flow right below the map, so it covers
+   neither the map nor any text; content below moves down while it is open */
+.rm-pop--flow {
+  position: static;
+  width: auto;
+  margin-block-start: var(--space-3);
 }
 
 .rm-pop[hidden] {

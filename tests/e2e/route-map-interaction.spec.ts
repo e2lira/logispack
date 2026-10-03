@@ -216,15 +216,15 @@ test.describe('route map interaction (fine pointer and keyboard)', () => {
     expect(box.left).toBeGreaterThanOrEqual(0);
     expect(box.right).toBeLessThanOrEqual(viewport.w);
     expect(box.top).toBeGreaterThanOrEqual(0);
-    expect(box.bottom).toBeLessThanOrEqual(viewport.h);
+    // a narrow popup sits in flow below the map and may extend past the fold
+    if (viewport.w >= 640) expect(box.bottom).toBeLessThanOrEqual(viewport.h);
     expect(widths.html).toBeLessThanOrEqual(widths.client);
-    // required content is either fully visible or reachable by scrolling the popup
-    const clipped = await popup(page).evaluate((el) => ({
-      overflows:
+    // required content is not clipped by the popup box
+    const clipped = await popup(page).evaluate(
+      (el) =>
         el.scrollHeight > el.clientHeight || el.scrollWidth > el.clientWidth,
-      scrolls: ['auto', 'scroll'].includes(getComputedStyle(el).overflowY),
-    }));
-    expect(!clipped.overflows || clipped.scrolls).toBe(true);
+    );
+    expect(clipped).toBe(false);
   });
 
   test('marker, close control and CTA stay reachable and do not overlap when open', async ({
@@ -358,21 +358,32 @@ test.describe('route map popup never covers required content at 320px', () => {
     const viewport = page.viewportSize()!;
     expect(pop.x).toBeGreaterThanOrEqual(0);
     expect(pop.x + pop.width).toBeLessThanOrEqual(viewport.width);
-    expect(pop.y).toBeGreaterThanOrEqual(0);
-    expect(pop.y + pop.height).toBeLessThanOrEqual(viewport.height);
-    const stage = (await page.locator('.rm__stage').boundingBox())!;
-    // the popup stays inside the map stage, so nothing outside it is covered
-    expect(pop.y).toBeGreaterThanOrEqual(stage.y - 1);
-    expect(pop.y + pop.height).toBeLessThanOrEqual(stage.y + stage.height + 1);
-    for (const selector of ['#rm-text', '#rm-sample-title']) {
-      const other = (await page.locator(selector).boundingBox())!;
-      const intersects =
-        pop.x < other.x + other.width &&
-        pop.x + pop.width > other.x &&
-        pop.y < other.y + other.height &&
-        pop.y + pop.height > other.y;
-      expect(intersects, `${selector} is covered by the popup`).toBe(false);
+    const intersects = (
+      a: { x: number; y: number; width: number; height: number },
+      b: { x: number; y: number; width: number; height: number },
+    ) =>
+      a.x < b.x + b.width &&
+      a.x + a.width > b.x &&
+      a.y < b.y + b.height &&
+      a.y + a.height > b.y;
+    await expect(marker(page)).toBeVisible();
+    const targets = {
+      '.rm__stage': page.locator('.rm__stage'),
+      marker: marker(page),
+      '#rm-text': page.locator('#rm-text'),
+      '#rm-sample-title': page.locator('#rm-sample-title'),
+    };
+    for (const [name, locator] of Object.entries(targets)) {
+      const other = (await locator.boundingBox())!;
+      expect(intersects(pop, other), `${name} is covered by the popup`).toBe(
+        false,
+      );
     }
+    // the map itself stays whole: the marker lies inside the stage
+    const stage = (await page.locator('.rm__stage').boundingBox())!;
+    const dot = (await marker(page).boundingBox())!;
+    expect(dot.y).toBeGreaterThanOrEqual(stage.y);
+    expect(dot.y + dot.height).toBeLessThanOrEqual(stage.y + stage.height);
   }
 
   test('hover and focus', async ({ page }) => {
