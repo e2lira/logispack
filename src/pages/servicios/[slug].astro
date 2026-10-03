@@ -1,8 +1,10 @@
 ---
+import Button from '../../components/Button.astro';
 import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
 import CtaBand from '../../components/CtaBand.astro';
+import Icon from '../../components/Icon.astro';
 import ProcessSteps from '../../components/ProcessSteps.astro';
 import { contact } from '../../lib/contact';
 
@@ -39,9 +41,7 @@ const family = await getEntry('families', service.data.family);
       <h1>{service.data.name}</h1>
       <p class="lead">{service.data.summary}</p>
       <div class="actions">
-        <a class="button" href={contact.whatsappUrl}>
-          {contact.whatsappLabel}
-        </a>
+        <Button href={contact.whatsappUrl}>{contact.whatsappLabel}</Button>
       </div>
     </div>
   </section>
@@ -51,7 +51,10 @@ const family = await getEntry('families', service.data.family);
       <h2 id="alcance-title">Alcance</h2>
       <ul class="check-list">
         {service.data.scope.map((item) => (
-          <li>{item}</li>
+          <li>
+            <Icon name="check" />
+            <span>{item}</span>
+          </li>
         ))}
       </ul>
     </div>

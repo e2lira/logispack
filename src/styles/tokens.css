@@ -1,73 +1,106 @@
 /*
- * Semantic design tokens. Brand hex values live ONLY in theme definitions.
- * Source of truth: docs/design-system.md
+ * Design tokens: the Logispack design system, single light theme.
+ * Names and values mirror the design system's tokens.json exactly.
+ * Only this file may contain hex color literals (enforced by tests/unit/tokens.test.ts).
+ *
+ * Accessibility corrections applied on top of the design system README:
+ * - olive-300 (2.0:1 on surface) is NEVER a control border. Outline (secondary)
+ *   buttons and other controls use olive-700 (6.2:1). olive-300 is not used for borders.
+ * - ink-muted on surface-sunken is 4.3:1: use ink for body text on surface-sunken.
+ *   ink-muted is only for surface and surface-raised (4.8:1).
+ * - olive-500 (3.8:1) is text only at 24px and above (the hero display accent line).
+ * - logo-red (4.1:1) is never used for text below 24px: icons, discs and pins only.
+ * - The logo-* colors are brand tokens for brand moments, not a selectable theme.
+ * - Keyboard focus is a 2px inner ring (forest-800) plus a 3px outer ring (focus-ring).
+ *   The inner ring is drawn as an outline so it survives forced-colors mode; the outer
+ *   ring is a box-shadow. forest-800 is 8.8:1 on surface; on the olive-900 footer the
+ *   forest inner ring would vanish, so inverse surfaces swap it for on-olive (8.6:1),
+ *   and the yellow focus-ring stays high contrast on olive-900.
  */
 
-/* Default theme (primary): olive */
-:root,
-[data-theme="olive"] {
-  --color-primary: #405329;
-  --color-primary-strong: #2e3d1e;
-  --color-primary-soft: #f1f1e5;
-  --color-secondary: #a3a263; /* decorative fills only */
-  --color-secondary-strong: #6b6b3a;
-  --color-accent: #d9343a;
-  --color-surface: #ffffff;
-  --color-surface-subtle: #f8f8f3;
-  --color-on-primary: #ffffff;
-  --color-ink: #1c2613;
-  --color-ink-muted: #536047;
-  --color-border: #d8d9bd; /* decorative only */
-  --color-border-strong: #8a8b5a;
-  --color-focus: #1c2613;
-  --color-focus-inverse: #ffffff;
-}
-
-/* Optional secondary theme: logo palette (provisional raster samples) */
-[data-theme="logo"] {
-  --color-primary: #025624;
-  --color-primary-strong: #013412;
-  --color-primary-soft: #bfe2fd;
-  --color-secondary: #0041af;
-  --color-secondary-strong: #0041af;
-  --color-accent: #f90820; /* non-text and large text only */
-  --color-surface: #ffffff;
-  --color-surface-subtle: #f5f8fb;
-  --color-on-primary: #ffffff;
-  --color-ink: #013412;
-  --color-ink-muted: #4f6b8a;
-  --color-border: #c5d3e3; /* decorative only */
-  --color-border-strong: #6e8099;
-  --color-focus: #013412;
-  --color-focus-inverse: #ffffff;
-}
-
-/* Dark sections (footer, primary bands) switch the focus color */
-[data-surface="inverse"] {
-  --color-focus: var(--color-focus-inverse);
-  --focus-outline: 3px solid var(--color-focus); /* re-declared: var() resolves where declared */
-}
-
 :root {
-  --space-1: 0.25rem;
-  --space-2: 0.5rem;
-  --space-3: 0.75rem;
-  --space-4: 1rem;
-  --space-6: 1.5rem;
-  --space-8: 2rem;
-  --space-12: 3rem;
-  --space-16: 4rem;
+  /* Surfaces and ink */
+  --surface: #fcfcfc;
+  --surface-raised: #ffffff;
+  --surface-sunken: #ecf0ec;
+  --border: #e8ece4; /* decorative hairline only, never the sole affordance */
+  --ink: #182414;
+  --ink-muted: #6c7078;
 
-  --radius-sm: 0.5rem;
-  --radius-md: 0.875rem;
-  --radius-lg: 1.25rem;
+  /* Olive scale */
+  --olive-100: #ecf0e4;
+  --olive-200: #d0d0b4;
+  --olive-300: #b8b88c; /* decorative only: 2.0:1 on surface */
+  --olive-500: #888438; /* text only at 24px+ */
+  --olive-700: #5c6434;
+  --olive-900: #485028;
+  --on-olive: #ffffff;
+
+  /* Forest */
+  --forest-800: #145428;
+  --forest-900: #144018;
+
+  /* Logo palette: brand moments only */
+  --logo-green: #005020;
+  --logo-leaf: #008848;
+  --logo-red: #f80820; /* icons and 24px+ text only */
+  --logo-blue: #0040a8;
+  --logo-sky: #0054b4;
+  --logo-sky-mid: #0078d0;
+  --logo-sky-light: #a0d4fc;
+
+  /* Illustrative map palette (reserved for the later route-map phase) */
+  --map-land: #f0f4f4;
+  --map-park: #d8ecd4;
+  --map-water: #c0e0fc;
+  --map-street: #ffffff;
+  --pin-origin: #109834;
+  --pin-destination: var(--logo-red);
+
+  /* Focus */
+  --focus-ring: #fcd40c; /* outer 3px ring, paired with the inner ring */
+  /* inner 2px ring; swapped on inverse surfaces */
+  --focus-inner: var(--forest-800);
+  --halo-tap: #e4d4688c;
+  --halo-hover: #ccc07059;
+
+  /* Type families */
+  --font-display: "Lexend", "Segoe UI", system-ui, sans-serif;
+  --font-sans: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+
+  /* Spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
   --radius-pill: 999px;
 
-  --shadow-card: 0 12px 32px
-    color-mix(in srgb, var(--color-ink) 10%, transparent);
-  --shadow-card-hover: 0 18px 44px
-    color-mix(in srgb, var(--color-primary) 16%, transparent);
+  /* Shadow */
+  --shadow-card:
+    0 1px 2px rgba(24, 36, 20, 0.06), 0 4px 12px rgba(24, 36, 20, 0.06);
+  --shadow-pop: 0 8px 24px rgba(24, 36, 20, 0.14);
+  --shadow-button: 0 2px 4px rgba(24, 36, 20, 0.18);
+
+  /* Size */
+  --tap-min: 44px;
+  --icon-disc: 40px;
+  --icon-disc-l: 56px;
+  --marker: 44px;
+
+  /* Layout (not part of tokens.json) */
   --container-max: 75rem;
-  --focus-outline: 3px solid var(--color-focus);
-  --focus-offset: 2px;
+}
+
+/* Dark bands (footer, contact band): the inner focus ring must contrast with olive-900 */
+[data-surface="inverse"] {
+  --focus-inner: var(--on-olive);
 }

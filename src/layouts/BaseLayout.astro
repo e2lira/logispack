@@ -1,7 +1,8 @@
 ---
 import '../styles/global.css';
-import inter400 from '@fontsource/inter/files/inter-latin-400-normal.woff2?url';
-import manrope800 from '@fontsource/manrope/files/manrope-latin-800-normal.woff2?url';
+import sourceSans400 from '@fontsource/source-sans-3/files/source-sans-3-latin-400-normal.woff2?url';
+import lexend700 from '@fontsource/lexend/files/lexend-latin-700-normal.woff2?url';
+import mark from '../assets/brand/logispack-mark.svg';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
@@ -22,16 +23,18 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    <link rel="icon" href={mark.src} type="image/svg+xml" />
+    <link rel="icon" href="/favicon.png" type="image/png" sizes="192x192" />
     <link
       rel="preload"
-      href={inter400}
+      href={sourceSans400}
       as="font"
       type="font/woff2"
       crossorigin
     />
     <link
       rel="preload"
-      href={manrope800}
+      href={lexend700}
       as="font"
       type="font/woff2"
       crossorigin

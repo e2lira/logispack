@@ -40,4 +40,7 @@ test('serves fonts from the local origin', async ({ page }) => {
   });
   await page.goto('/', { waitUntil: 'networkidle' });
   expect(fonts.length).toBeGreaterThan(0);
+  expect(fonts.some((url) => /lexend/i.test(url))).toBe(true);
+  expect(fonts.some((url) => /source-sans-3/i.test(url))).toBe(true);
+  expect(fonts.filter((url) => /manrope|inter-/i.test(url))).toEqual([]);
 });

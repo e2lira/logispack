@@ -18,8 +18,9 @@
     "test:e2e": "pnpm build && playwright test"
   },
   "dependencies": {
-    "@fontsource/inter": "^5.3.0",
-    "@fontsource/manrope": "^5.3.0",
+    "@fontsource/lexend": "^5.3.0",
+    "@fontsource/source-sans-3": "^5.3.0",
+    "@phosphor-icons/core": "^2.1.1",
     "astro": "^7.3.5",
     "sharp": "^0.35.5"
   },

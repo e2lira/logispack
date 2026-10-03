@@ -31,17 +31,7 @@ test.describe('every route', () => {
         await page.goto(route);
       });
 
-      test('has zero axe violations in the olive theme', async ({ page }) => {
-        const results = await new AxeBuilder({ page })
-          .withTags(AXE_TAGS)
-          .analyze();
-        expect(results.violations).toEqual([]);
-      });
-
-      test('has zero axe violations in the logo theme', async ({ page }) => {
-        await page.evaluate(() => {
-          document.documentElement.dataset['theme'] = 'logo';
-        });
+      test('has zero axe violations', async ({ page }) => {
         const results = await new AxeBuilder({ page })
           .withTags(AXE_TAGS)
           .analyze();
@@ -118,7 +108,7 @@ test.describe('without JavaScript', () => {
       'Su operación logística, resuelta de principio a fin',
     );
     await expect(
-      page.locator('a[href="https://wa.me/525544792696"]').first(),
+      page.locator('main a[href="https://wa.me/525544792696"]').first(),
     ).toBeVisible();
   });
 
@@ -386,4 +376,112 @@ test.describe('preguntas frecuentes', () => {
       'entre 3 y 10 días hábiles',
     );
   });
+});
+
+test.describe('photography', () => {
+  test('feature card photos anchor the crop to the top so faces are kept', async ({
+    page,
+  }) => {
+    await page.goto('/');
+    const imgs = page.locator('.feature .media img');
+    await expect(imgs).toHaveCount(3);
+    for (const img of await imgs.all()) {
+      await expect(img).toHaveCSS('object-position', '50% 0%');
+    }
+  });
+
+  test('hero photo is the eager, high-priority LCP image', async ({ page }) => {
+    await page.goto('/');
+    const img = page.locator('.hero img');
+    await expect(img).toHaveCount(1);
+    await expect(img).toHaveAttribute('loading', 'eager');
+    await expect(img).toHaveAttribute('fetchpriority', 'high');
+    await expect(img).toHaveAttribute('width', '380');
+    await expect(img).toHaveAttribute('height', '330');
+    await expect(img).toHaveAttribute(
+      'alt',
+      'Repartidor de Logispack con un paquete frente al Ángel de la Independencia',
+    );
+  });
+
+  test('each service family card shows a lazy photo with alt text', async ({
+    page,
+  }) => {
+    await page.goto('/');
+    const images = page.locator('#familias img');
+    await expect(images).toHaveCount(families.length);
+    for (let i = 0; i < families.length; i++) {
+      await expect(images.nth(i)).toHaveAttribute('loading', 'lazy');
+      await expect(images.nth(i)).toHaveAttribute('alt', /.{20,}/);
+    }
+  });
+
+  test('no raster photo is displayed larger than its native width', async ({
+    page,
+  }) => {
+    await page.goto('/', { waitUntil: 'networkidle' });
+    await page.evaluate(() =>
+      document
+        .querySelectorAll('img')
+        .forEach((img) => img.setAttribute('loading', 'eager')),
+    );
+    await page.waitForLoadState('networkidle');
+    const sizes = await page.$$eval('main img', (imgs) =>
+      imgs.map((img) => ({
+        src: (img as HTMLImageElement).currentSrc,
+        shown: img.getBoundingClientRect().width,
+        natural: (img as HTMLImageElement).naturalWidth,
+      })),
+    );
+    expect(sizes.length).toBe(1 + families.length);
+    for (const { shown, natural, src } of sizes) {
+      expect(natural, src).toBeGreaterThan(0);
+      expect(shown, src).toBeLessThanOrEqual(natural + 0.5);
+    }
+  });
+});
+
+test.describe('tap targets', () => {
+  test('buttons, nav links and disclosure summaries are at least 44px tall', async ({
+    page,
+  }) => {
+    await page.goto('/');
+    const heights = await page.$$eval(
+      '.button, .site-nav a, .faq summary, .feature-link',
+      (els) =>
+        els
+          .filter((el) => el.getClientRects().length > 0)
+          .map((el) => el.getBoundingClientRect().height),
+    );
+    expect(heights.length).toBeGreaterThan(10);
+    for (const height of heights) expect(height).toBeGreaterThanOrEqual(44);
+  });
+});
+
+test.describe('reduced motion', () => {
+  test('buttons do not transition or transform', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/');
+    const style = await page
+      .locator('.button')
+      .first()
+      .evaluate((el) => {
+        const s = getComputedStyle(el);
+        return { duration: s.transitionDuration, transform: s.transform };
+      });
+    expect(style.duration).toBe('0s');
+    expect(style.transform).toBe('none');
+  });
+});
+
+test('home hero accent line is olive-500 and at least 24px', async ({
+  page,
+}) => {
+  await page.goto('/');
+  const style = await page.locator('.hero h1 span').evaluate((el) => {
+    const s = getComputedStyle(el);
+    return { color: s.color, size: parseFloat(s.fontSize) };
+  });
+  expect(style.color).toBe('rgb(136, 132, 56)');
+  expect(style.size).toBeGreaterThanOrEqual(24);
 });

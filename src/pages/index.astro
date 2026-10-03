@@ -1,12 +1,17 @@
 ---
+import Button from '../components/Button.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CtaBand from '../components/CtaBand.astro';
+import FeatureCard from '../components/FeatureCard.astro';
 import FaqList from '../components/FaqList.astro';
+import Icon from '../components/Icon.astro';
+import InfoNote from '../components/InfoNote.astro';
 import Media from '../components/Media.astro';
 import ProcessSteps from '../components/ProcessSteps.astro';
 import TrustList from '../components/TrustList.astro';
 import { getFamilyGroups } from '../lib/catalog';
 import { contact } from '../lib/contact';
+import { getFamilyVisual } from '../lib/family-visuals';
 import { photos } from '../lib/photos';
 
 const groups = await getFamilyGroups();
@@ -23,42 +28,54 @@ const heroPhoto = photos.hero;
         <p class="eyebrow">
           Servicios logísticos y maquila · Certificación REPSE
         </p>
-        <h1>Su operación logística, resuelta de principio a fin</h1>
+        <h1>
+          Su operación logística, <span>resuelta de principio a fin</span>
+        </h1>
         <p class="lead">
           Personal certificado, maquila con acabado premium y almacenamiento
           controlado. Su producto sale a tiempo y llega listo para exhibirse.
         </p>
         <div class="actions">
-          <a class="button" href={contact.whatsappUrl}>
-            {contact.whatsappLabel}
-          </a>
-          <a class="button button--secondary" href="/servicios/">
+          <Button href={contact.whatsappUrl}>{contact.whatsappLabel}</Button>
+          <Button href="/servicios/" variant="outline">
             Ver servicios
-          </a>
+          </Button>
         </div>
-        <p class="note">
+        <InfoNote>
           Respuesta el mismo día hábil. Cotización sin compromiso.
-        </p>
+        </InfoNote>
       </div>
-      {heroPhoto && <Media {...heroPhoto} loading="eager" />}
+      {heroPhoto && (
+        <Media
+          {...heroPhoto}
+          loading="eager"
+          fetchpriority="high"
+          sizes="(min-width: 64rem) 380px, 100vw"
+        />
+      )}
     </div>
   </section>
 
   <section class="section" id="familias" aria-labelledby="familias-title">
     <div class="container">
       <h2 id="familias-title">Nuestros servicios</h2>
-      <div class="grid grid--3">
+      <div class="feature-grid">
         {groups.map(({ family, services }) => (
-          <article class="card">
-            <h3>{family.data.name}</h3>
-            <ul class="link-list">
+          <FeatureCard
+            title={family.data.name}
+            visual={getFamilyVisual(family.id)}
+          >
+            <ul class="feature__links">
               {services.map((service) => (
                 <li>
-                  <a href={`/servicios/${service.id}/`}>{service.data.name}</a>
+                  <a class="feature-link" href={`/servicios/${service.id}/`}>
+                    {service.data.name}
+                    <Icon name="caret-right" size="sm" />
+                  </a>
                 </li>
               ))}
             </ul>
-          </article>
+          </FeatureCard>
         ))}
       </div>
     </div>

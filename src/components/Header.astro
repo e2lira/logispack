@@ -1,6 +1,7 @@
 ---
+import Button from './Button.astro';
 import { Image } from 'astro:assets';
-import logo from '../assets/logo.png';
+import logo from '../assets/brand/logispack-logo.svg';
 import { contact } from '../lib/contact';
 import { navCurrent, navItems } from '../lib/nav';
 
@@ -13,13 +14,10 @@ const currentPath = Astro.url.pathname;
       <Image
         src={logo}
         alt="Logispack Capital Humano, inicio"
-        width={160}
-        height={80}
+        width={175}
+        height={60}
         loading="eager"
       />
-    </a>
-    <a class="button" href={contact.whatsappUrl}>
-      {contact.whatsappLabel}
     </a>
     <nav class="site-nav" aria-label="Principal">
       <ul>
@@ -35,5 +33,6 @@ const currentPath = Astro.url.pathname;
         ))}
       </ul>
     </nav>
+    <Button href={contact.whatsappUrl}>{contact.whatsappLabel}</Button>
   </div>
 </header>
