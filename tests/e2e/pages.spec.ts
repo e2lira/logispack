@@ -396,8 +396,8 @@ test.describe('photography', () => {
     await expect(img).toHaveCount(1);
     await expect(img).toHaveAttribute('loading', 'eager');
     await expect(img).toHaveAttribute('fetchpriority', 'high');
-    await expect(img).toHaveAttribute('width', '380');
-    await expect(img).toHaveAttribute('height', '330');
+    await expect(img).toHaveAttribute('width', '1200');
+    await expect(img).toHaveAttribute('height', '1040');
     await expect(img).toHaveAttribute(
       'alt',
       'Repartidor de Logispack con un paquete frente al Ángel de la Independencia',
@@ -438,6 +438,7 @@ test.describe('photography', () => {
       expect(natural, src).toBeGreaterThan(0);
       expect(shown, src).toBeLessThanOrEqual(natural + 0.5);
     }
+    expect(sizes[0]!.shown).toBeLessThanOrEqual(600.5);
   });
 });
 
