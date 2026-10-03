@@ -12,11 +12,11 @@ export type PhotoSlot = 'hero' | 'nosotros';
 /**
  * Photography registry. Layouts render a photo only when its slot is filled, so
  * pages look complete without photos. To add one, import the file from
- * `src/assets/photos/` and register it here with its Spanish alt text. The
- * source photos are low resolution: size every slot at or below its native width.
+ * `src/assets/photos/` and register it here with its Spanish alt text. Size
+ * every slot at or below the source's native width.
  */
 export const photos: Partial<Record<PhotoSlot, Photo>> = {
-  // Native size 380x330: never render this slot wider than 380px.
+  // Native size 1200x1040: the desktop slot is capped at 600px for 2x density.
   hero: {
     image: courierHero,
     alt: 'Repartidor de Logispack con un paquete frente al Ángel de la Independencia',

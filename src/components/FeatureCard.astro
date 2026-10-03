@@ -12,7 +12,7 @@ const { title, visual } = Astro.props;
 ---
 
 <article class="feature">
-  <Media {...visual.photo} sizes="(min-width: 56rem) 33vw, 447px" />
+  <Media {...visual.photo} sizes="(min-width: 56rem) 33vw, 100vw" />
   <div class="feature__body">
     <div class="feature__head">
       <span class={`disc disc--lg disc--${visual.tone}`}>

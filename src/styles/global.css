@@ -435,15 +435,15 @@ h3 {
   align-items: center;
 }
 
-/* Hero photo: native width is 380px, so the slot never grows past it */
+/* The 1200px-wide source supports this 600px hero slot at 2x density. */
 .hero .media {
-  max-width: 380px;
+  max-width: 600px;
   justify-self: center;
 }
 
 @media (min-width: 64rem) {
   .hero .container.has-media {
-    grid-template-columns: 1fr 380px;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 600px);
   }
 }
 
@@ -466,9 +466,8 @@ h3 {
 }
 
 /*
- * Feature card (service families). The photos are low resolution (447-455px
- * wide), so cards are capped at 447px (the narrowest photo) and the grid only goes 3-up when each
- * card is narrower than that.
+ * Feature card (service families). Each source is 1400px wide, so the cards
+ * can use the responsive grid while remaining capped at their native width.
  */
 .feature-grid {
   display: grid;
@@ -477,7 +476,6 @@ h3 {
 
 .feature {
   width: 100%;
-  max-width: 447px;
   margin-inline: auto;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
@@ -486,7 +484,7 @@ h3 {
 }
 
 .feature .media {
-  aspect-ratio: 447 / 164;
+  aspect-ratio: 7 / 3;
   border-end-start-radius: 0;
   border-end-end-radius: 0;
 }
