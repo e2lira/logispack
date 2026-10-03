@@ -33,7 +33,8 @@ test.describe('reduced motion', () => {
     await marker(page).scrollIntoViewIfNeeded();
     expect((await animation(page)).name).toBe('none');
     const first = await marker(page).boundingBox();
-    await page.waitForTimeout(400);
+    await page.evaluate(() => new Promise((r) => requestAnimationFrame(r)));
+    await page.evaluate(() => new Promise((r) => requestAnimationFrame(r)));
     expect(await marker(page).boundingBox()).toEqual(first);
     expect(
       await page.evaluate(
@@ -89,7 +90,8 @@ test.describe('motion allowed', () => {
     expect((await animation(page)).state).toBe('paused');
     const first = await marker(page).boundingBox();
     const popupFirst = await popup(page).boundingBox();
-    await page.waitForTimeout(400);
+    await page.evaluate(() => new Promise((r) => requestAnimationFrame(r)));
+    await page.evaluate(() => new Promise((r) => requestAnimationFrame(r)));
     expect(await marker(page).boundingBox()).toEqual(first);
     expect(await popup(page).boundingBox()).toEqual(popupFirst);
   });
@@ -108,6 +110,48 @@ test.describe('motion allowed', () => {
     await expect
       .poll(async () => (await animation(page)).state)
       .toBe('running');
+  });
+
+  test('a focused, hovered or open marker is fully opaque at any animation phase', async ({
+    page,
+  }) => {
+    await page.goto('/');
+    await marker(page).scrollIntoViewIfNeeded();
+    const opacityAtStart = () =>
+      rider(page).evaluate((el) => {
+        const [anim] = el.getAnimations();
+        anim!.pause();
+        anim!.currentTime = 0;
+        return getComputedStyle(el).opacity;
+      });
+    // sanity: the 0% frame really is invisible while nothing is focused
+    expect(await opacityAtStart()).toBe('0');
+    // keyboard focus
+    await tabToMarker(page);
+    await rider(page).evaluate((el) => {
+      el.getAnimations()[0]!.currentTime = 0;
+    });
+    await expect
+      .poll(() => rider(page).evaluate((el) => getComputedStyle(el).opacity))
+      .toBe('1');
+    // open via Escape-less blur, then hover at the 100% frame
+    await page.keyboard.press('Escape');
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Tab');
+    await expect(marker(page)).not.toBeFocused();
+    await rider(page).evaluate((el) => {
+      const anim = el.getAnimations()[0]!;
+      anim.pause();
+      anim.currentTime = 16000 - 1;
+    });
+    expect(
+      await rider(page).evaluate((el) => getComputedStyle(el).opacity),
+    ).not.toBe('1');
+    await marker(page).hover({ force: true });
+    await expect(popup(page)).toBeVisible();
+    expect(
+      await rider(page).evaluate((el) => getComputedStyle(el).opacity),
+    ).toBe('1');
   });
 
   test('a touch tap opens the popup on a moving marker and pauses it', async ({

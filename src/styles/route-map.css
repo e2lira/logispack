@@ -82,6 +82,9 @@
   overflow: clip;
   border-radius: var(--radius-lg);
   pointer-events: none;
+  /* Above the popup: on narrow stages the popup is a sheet that spans the
+     stage, and the marker (hit target and focus ring) must stay visible */
+  z-index: 3;
 }
 
 /* The rider layer is exactly the stage box, so translate % tracks the map */
@@ -146,6 +149,10 @@ button.rm-marker:focus-visible {
   inset-inline-start: 0;
   z-index: 2;
   width: min(18rem, 100%);
+  /* Never taller than the stage: scrolls internally instead of spilling out */
+  max-height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   padding: var(--space-3) var(--space-4) var(--space-4);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
@@ -247,6 +254,13 @@ button.rm-marker:focus-visible {
   .rm__rider:has(.rm-marker:focus-visible),
   .rm[data-state="open"] .rm__rider {
     animation-play-state: paused;
+  }
+
+  /* A paused marker must never be frozen on an invisible frame. !important
+     is required: animated values otherwise beat normal author declarations. */
+  .rm__rider:has(.rm-marker:hover, .rm-marker:focus-visible),
+  .rm[data-state="open"] .rm__rider {
+    opacity: 1 !important;
   }
 
   @keyframes rm-travel {

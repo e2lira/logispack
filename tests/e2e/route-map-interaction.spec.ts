@@ -26,10 +26,14 @@ async function tabToMarker(page: Page) {
   await expect(marker(page)).toBeFocused();
 }
 
+/** Move past the 150ms close delay and a beat more, deterministically. */
+const SETTLE_MS = 400;
+
 test.describe('route map interaction (fine pointer and keyboard)', () => {
   test.use({ reducedMotion: 'reduce' });
 
   test.beforeEach(async ({ page }) => {
+    await page.clock.install();
     await page.goto('/');
     await marker(page).scrollIntoViewIfNeeded();
   });
@@ -112,7 +116,7 @@ test.describe('route map interaction (fine pointer and keyboard)', () => {
     await expect(marker(page)).toBeFocused();
     await expect(marker(page)).toHaveAttribute('aria-expanded', 'false');
     // still latched after a beat
-    await page.waitForTimeout(300);
+    await page.clock.runFor(SETTLE_MS);
     await expect(popup(page)).toBeHidden();
     // blur and a fresh keyboard focus reopens
     await page.keyboard.press('Shift+Tab');
@@ -130,7 +134,7 @@ test.describe('route map interaction (fine pointer and keyboard)', () => {
     await page.keyboard.press('Escape');
     await expect(popup(page)).toBeHidden();
     await expect(marker(page)).toBeFocused();
-    await page.waitForTimeout(300);
+    await page.clock.runFor(SETTLE_MS);
     await expect(popup(page)).toBeHidden();
   });
 
@@ -142,7 +146,7 @@ test.describe('route map interaction (fine pointer and keyboard)', () => {
     await page.keyboard.press('Enter');
     await expect(popup(page)).toBeHidden();
     await expect(marker(page)).toBeFocused();
-    await page.waitForTimeout(300);
+    await page.clock.runFor(SETTLE_MS);
     await expect(popup(page)).toBeHidden();
     await expect(marker(page)).toHaveAttribute('aria-expanded', 'false');
   });
@@ -165,7 +169,7 @@ test.describe('route map interaction (fine pointer and keyboard)', () => {
     await expect(popup(page)).toBeHidden();
     const at = await centre(marker(page));
     await page.mouse.move(at.x + 2, at.y + 2);
-    await page.waitForTimeout(300);
+    await page.clock.runFor(SETTLE_MS);
     await expect(popup(page)).toBeHidden();
     await page.mouse.move(2, 2, { steps: 4 });
     await marker(page).hover();
@@ -182,7 +186,7 @@ test.describe('route map interaction (fine pointer and keyboard)', () => {
     await page.mouse.up();
     await expect(popup(page)).toBeHidden();
     await page.mouse.move(2, 2, { steps: 4 });
-    await page.waitForTimeout(300);
+    await page.clock.runFor(SETTLE_MS);
     await expect(popup(page)).toBeHidden();
     await marker(page).hover();
     await expect(popup(page)).toBeVisible();
@@ -214,12 +218,13 @@ test.describe('route map interaction (fine pointer and keyboard)', () => {
     expect(box.top).toBeGreaterThanOrEqual(0);
     expect(box.bottom).toBeLessThanOrEqual(viewport.h);
     expect(widths.html).toBeLessThanOrEqual(widths.client);
-    // required content is not clipped by the popup box
-    const clipped = await popup(page).evaluate(
-      (el) =>
+    // required content is either fully visible or reachable by scrolling the popup
+    const clipped = await popup(page).evaluate((el) => ({
+      overflows:
         el.scrollHeight > el.clientHeight || el.scrollWidth > el.clientWidth,
-    );
-    expect(clipped).toBe(false);
+      scrolls: ['auto', 'scroll'].includes(getComputedStyle(el).overflowY),
+    }));
+    expect(!clipped.overflows || clipped.scrolls).toBe(true);
   });
 
   test('marker, close control and CTA stay reachable and do not overlap when open', async ({
@@ -282,6 +287,7 @@ test.describe('route map interaction (touch / coarse pointer)', () => {
   test.use({ reducedMotion: 'reduce', hasTouch: true });
 
   test.beforeEach(async ({ page }) => {
+    await page.clock.install();
     await page.goto('/');
     await marker(page).scrollIntoViewIfNeeded();
   });
@@ -292,7 +298,7 @@ test.describe('route map interaction (touch / coarse pointer)', () => {
     await expect(marker(page)).toHaveAttribute('aria-expanded', 'true');
     await marker(page).tap();
     await expect(popup(page)).toBeHidden();
-    await page.waitForTimeout(300);
+    await page.clock.runFor(SETTLE_MS);
     await expect(popup(page)).toBeHidden();
     await marker(page).tap();
     await expect(popup(page)).toBeVisible();
@@ -304,7 +310,7 @@ test.describe('route map interaction (touch / coarse pointer)', () => {
     // the popup may cover the heading, so tap a blank corner of the viewport
     await page.touchscreen.tap(page.viewportSize()!.width - 3, 3);
     await expect(popup(page)).toBeHidden();
-    await page.waitForTimeout(300);
+    await page.clock.runFor(SETTLE_MS);
     await expect(popup(page)).toBeHidden();
   });
 
@@ -316,7 +322,7 @@ test.describe('route map interaction (touch / coarse pointer)', () => {
     await closeButton(page).tap();
     await expect(popup(page)).toBeHidden();
     await expect(marker(page)).toBeFocused();
-    await page.waitForTimeout(300);
+    await page.clock.runFor(SETTLE_MS);
     await expect(popup(page)).toBeHidden();
     await expect(marker(page)).toHaveAttribute('aria-expanded', 'false');
   });
@@ -325,7 +331,7 @@ test.describe('route map interaction (touch / coarse pointer)', () => {
     page,
   }) => {
     await marker(page).tap();
-    await page.waitForTimeout(300);
+    await page.clock.runFor(SETTLE_MS);
     await expect(popup(page)).toBeVisible();
     const box = await popup(page).boundingBox();
     const viewport = page.viewportSize()!;
@@ -341,5 +347,59 @@ test.describe('route map interaction (touch / coarse pointer)', () => {
       .withTags(AXE_TAGS)
       .analyze();
     expect(results.violations).toEqual([]);
+  });
+});
+
+test.describe('route map popup never covers required content at 320px', () => {
+  test.use({ reducedMotion: 'reduce', viewport: { width: 320, height: 640 } });
+
+  async function expectClear(page: Page) {
+    const pop = (await popup(page).boundingBox())!;
+    const viewport = page.viewportSize()!;
+    expect(pop.x).toBeGreaterThanOrEqual(0);
+    expect(pop.x + pop.width).toBeLessThanOrEqual(viewport.width);
+    expect(pop.y).toBeGreaterThanOrEqual(0);
+    expect(pop.y + pop.height).toBeLessThanOrEqual(viewport.height);
+    const stage = (await page.locator('.rm__stage').boundingBox())!;
+    // the popup stays inside the map stage, so nothing outside it is covered
+    expect(pop.y).toBeGreaterThanOrEqual(stage.y - 1);
+    expect(pop.y + pop.height).toBeLessThanOrEqual(stage.y + stage.height + 1);
+    for (const selector of ['#rm-text', '#rm-sample-title']) {
+      const other = (await page.locator(selector).boundingBox())!;
+      const intersects =
+        pop.x < other.x + other.width &&
+        pop.x + pop.width > other.x &&
+        pop.y < other.y + other.height &&
+        pop.y + pop.height > other.y;
+      expect(intersects, `${selector} is covered by the popup`).toBe(false);
+    }
+  }
+
+  test('hover and focus', async ({ page }) => {
+    await page.goto('/');
+    await page.locator('.rm__stage').scrollIntoViewIfNeeded();
+    await marker(page).hover();
+    await expect(popup(page)).toBeVisible();
+    await expectClear(page);
+    await page.mouse.move(2, 2, { steps: 4 });
+    await expect(popup(page)).toBeHidden();
+    await tabToMarker(page);
+    await expect(popup(page)).toBeVisible();
+    await expectClear(page);
+  });
+
+  test('touch', async ({ browser }) => {
+    const context = await browser.newContext({
+      hasTouch: true,
+      reducedMotion: 'reduce',
+      viewport: { width: 320, height: 640 },
+    });
+    const page = await context.newPage();
+    await page.goto('/');
+    await page.locator('.rm__stage').scrollIntoViewIfNeeded();
+    await marker(page).tap();
+    await expect(popup(page)).toBeVisible();
+    await expectClear(page);
+    await context.close();
   });
 });

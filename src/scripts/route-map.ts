@@ -3,6 +3,9 @@
  * section already shows the map, a static marker and the sample data. This script
  * turns the static marker into a button that opens a non-modal popup. All
  * decisions live in the pure reducer in src/lib/route-map-state.ts.
+ *
+ * Single-instance by design: the markup uses fixed ids (rm-text, rm-popup) and
+ * every instance would register its own document-level listeners.
  */
 import {
   CLOSE_DELAY_MS,
@@ -61,12 +64,11 @@ function enhance(root: HTMLElement): void {
         room.right >= w ? cx + m.width / 2 + GAP : cx - m.width / 2 - GAP - w;
       top = clamp(cy - h / 2, s.height - h);
     } else {
-      // Narrow stage: above or below the marker, on whichever side fits the viewport
-      const roomAbove = m.top - GAP;
-      const roomBelow = innerHeight - m.bottom - GAP;
-      const above = roomAbove >= h || (roomBelow < h && roomAbove >= roomBelow);
+      // Narrow stage: a sheet pinned inside the stage, on the half the marker
+      // is not in. CSS caps its height at the stage and scrolls it internally,
+      // so it never covers content outside the map.
       left = clamp(cx - w / 2, s.width - w);
-      top = above ? m.top - s.top - GAP - h : m.bottom - s.top + GAP;
+      top = cy > s.height / 2 ? 0 : s.height - h;
     }
     popup!.style.left = `${Math.round(left)}px`;
     popup!.style.top = `${Math.round(top)}px`;
