@@ -44,14 +44,30 @@ function enhance(root: HTMLElement): void {
     const s = stage!.getBoundingClientRect();
     const m = marker.getBoundingClientRect();
     const { offsetWidth: w, offsetHeight: h } = popup!;
-    const left = Math.min(
-      Math.max(m.left + m.width / 2 - s.left - w / 2, 0),
-      Math.max(0, s.width - w),
-    );
-    const roomAbove = m.top - GAP;
-    const roomBelow = innerHeight - m.bottom - GAP;
-    const above = roomAbove >= h || (roomBelow < h && roomAbove >= roomBelow);
-    const top = above ? m.top - s.top - GAP - h : m.bottom - s.top + GAP;
+    const clamp = (value: number, max: number) =>
+      Math.min(Math.max(value, 0), Math.max(0, max));
+    // Marker centre in stage coordinates
+    const cx = m.left + m.width / 2 - s.left;
+    const cy = m.top + m.height / 2 - s.top;
+    const room = {
+      right: s.width - (cx + m.width / 2) - GAP,
+      left: cx - m.width / 2 - GAP,
+    };
+    let left: number;
+    let top: number;
+    if (room.right >= w || room.left >= w) {
+      // Wide stage: sit beside the marker so the map and heading stay uncovered
+      left =
+        room.right >= w ? cx + m.width / 2 + GAP : cx - m.width / 2 - GAP - w;
+      top = clamp(cy - h / 2, s.height - h);
+    } else {
+      // Narrow stage: above or below the marker, on whichever side fits the viewport
+      const roomAbove = m.top - GAP;
+      const roomBelow = innerHeight - m.bottom - GAP;
+      const above = roomAbove >= h || (roomBelow < h && roomAbove >= roomBelow);
+      left = clamp(cx - w / 2, s.width - w);
+      top = above ? m.top - s.top - GAP - h : m.bottom - s.top + GAP;
+    }
     popup!.style.left = `${Math.round(left)}px`;
     popup!.style.top = `${Math.round(top)}px`;
   }
