@@ -40,6 +40,29 @@ jobs:
 
       - run: pnpm exec playwright test
 
+      - name: Lighthouse CI (mobile budgets)
+        run: pnpm exec lhci autorun
+
+      - name: Verify release artifact
+        run: node scripts/release-check.mjs --verify-only
+
+      - uses: actions/upload-artifact@v4
+        if: github.ref == 'refs/heads/main' && success()
+        with:
+          name: dist
+          path: dist/
+          include-hidden-files: true
+          retention-days: 30
+          if-no-files-found: error
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lighthouse-report
+          path: .lighthouseci/
+          retention-days: 7
+          if-no-files-found: ignore
+
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
