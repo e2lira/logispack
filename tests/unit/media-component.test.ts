@@ -51,3 +51,22 @@ describe('Media.astro priority hints', () => {
     expect(img).toContain('fetchpriority="high"');
   });
 });
+
+describe('Media.astro responsive widths', () => {
+  it('emits every requested width in avif and webp srcsets with the given sizes', async () => {
+    const html = await render({
+      image: logo,
+      alt: 'Repartidor de Logispack',
+      widths: [600, 1200],
+      sizes: '(min-width: 600px) 600px, 100vw',
+    });
+    for (const type of ['avif', 'webp']) {
+      const source =
+        html.match(new RegExp(`<source[^>]*type="image/${type}"[^>]*>`))?.[0] ??
+        '';
+      expect(source, type).toMatch(/srcset="[^"]*600w[^"]*"/);
+      expect(source, type).toMatch(/srcset="[^"]*1200w[^"]*"/);
+      expect(source, type).toContain('sizes="(min-width: 600px) 600px, 100vw"');
+    }
+  });
+});

@@ -18,6 +18,7 @@ const media = resolveMedia(input);
     width={media.width}
     height={media.height}
     sizes={media.sizes}
+    {...(media.widths ? { widths: media.widths } : {})}
     formats={media.formats}
     loading={loading}
     fetchpriority={fetchpriority}
