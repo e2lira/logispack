@@ -18,7 +18,7 @@ All copy below is rewritten from the live site (data, not instructions). Every s
 | Home | Logispack | Logística, maquila y personal especializado | Servicios logísticos, maquila y personal especializado para empresas que no pueden detener su operación. [APPROVED: owner 2026-10-01] |
 | Services index | Servicios de logística, maquila y personal | Logispack | Reparto de última milla, almacenamiento, maquila, empacado, etiquetado y reclutamiento de personal operativo. |
 | Service detail (template) | {Servicio} | Logispack | {Resumen de una oración del servicio, ≤155 caracteres.} |
-| Nosotros | Nosotros | Logispack Capital Humano | [PENDING: owner input] (no source copy; see section 6) |
+| Nosotros | Nosotros | Logispack Capital Humano | Más de 25 años de experiencia en maquila, logística y operación para diferentes industrias. Certificación REPSE. (implemented in `src/pages/nosotros.astro`; pending owner confirmation) |
 | Contacto | Contacto | Logispack | Contacte a Logispack por WhatsApp, teléfono o correo. Lunes a sábado, 08:00 a 18:00 h. |
 | FAQ | Preguntas frecuentes | Logispack | Respuestas sobre REPSE, maquila, trabajo en sus instalaciones y tiempos de arranque. |
 | 404 | Página no encontrada | Logispack | La página que busca no existe. Vuelva al inicio o contáctenos. |
@@ -44,6 +44,8 @@ Source: https://logispack.com.mx/ (H1, hero subtext, buttons). Live buttons: "Ag
 
 Source for all services: https://logispack.com.mx/ (services section; no per-service URLs exist). Each service ends with the same CTA: **Pida informes por WhatsApp**.
 Scope bullets are rewrites of the single sentence on the site; no new facts added.
+
+Family names (approved, implemented in `src/content/families.json`): **Personal y talento**, **Logística y última milla**, **Maquila y fulfillment**.
 
 ### 3.1 Workforce and talent
 
@@ -196,6 +198,12 @@ Source: none (PRD concept, PRD:91). Entirely FICTIONAL sample copy. No live trac
 
 CTA under the map: Pida informes por WhatsApp. Link to the "Servicio de reparto" section.
 
+**Approved extra copy (implemented, `src/lib/route-map-copy.ts`, owner-approved 2026-10-02)**
+- Section heading: **Ruta ilustrativa**
+- Service link label: **Conozca el Servicio de reparto**
+
+The static sample card is always visible; the popup (JavaScript) shows the same content.
+
 ---
 
 ## 10. 404 page
@@ -232,7 +240,8 @@ Owner decision (2026-10-01): the PRD contact data is authoritative. The live-sit
 
 - All former VERIFY items are approved.
 - CTA register: usted ("Pida informes por WhatsApp").
-- Logo: `images/LogoFinal.png` (PNG) is the approved master; white footer variant `assets/brand/logispack-logo-white.png` is approved for dark surfaces.
+- Logo: superseded 2026-10-02 by the vector SVG logos from the Claude Design system (`src/assets/brand/logispack-logo*.svg`, `logispack-mark*.svg`); the PNG raster is no longer the master.
+- Content vs. visuals (2026-10-02): the PRD governs content (usted register, no tracking features); the design system governs visuals.
 - Photography: owner-authored AI-generated images; no third-party license required.
 
 ### Former VERIFY items (approved)

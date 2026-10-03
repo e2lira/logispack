@@ -1,6 +1,6 @@
 # RFC 0001: Interactive Floating-Glow Card
 
-- **Status:** Partially accepted — the illustrative route-map interaction is accepted; the floating-glow card decision remains proposed.
+- **Status:** Partially implemented — the illustrative route-map interaction is **Implemented** (PR #8); the floating-glow card remains **Proposed**.
 - **Decision:** Build the card with native CSS and small native JavaScript; do not add a third-party animation or tilt dependency.
 
 ## Summary
@@ -52,7 +52,14 @@ This preserves a minimal dependency surface, makes theme switching and reduced-m
 - Preserve readable contrast and avoid text/image filters that reduce legibility.
 - Keep a static border/shadow state that communicates hierarchy without motion.
 
-## Route-map interaction (accepted)
+## Route-map interaction (implemented, PR #8)
+
+Implementation deviations from the contract below:
+
+- On narrow widths (below 64rem) the popup renders in flow below the map instead of floating beside the marker; on wide stages it sits beside the marker.
+- The close delay that bridges marker-to-popup hover travel is 150 ms (`CLOSE_DELAY_MS`).
+- A static sample card is always visible and is the no-JavaScript source of truth.
+- Token names in this RFC (`--color-*`) predate the design system; current names are in `docs/design-system.md` and `src/styles/tokens.css`.
 
 The illustrative delivery map follows the same token contract. Route lines, moving marker, destination cue, labels, information popup, and any glow must derive from semantic tokens rather than raw brand colors. Theme changes must preserve meaningful route contrast against the surface and a static, readable reduced-motion state.
 

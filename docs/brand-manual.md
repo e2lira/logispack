@@ -2,10 +2,12 @@
 
 Este manual habilita decisiones de diseño e implementación mientras se valida la identidad final. Se basa únicamente en el archivo suministrado `../images/LogoFinal.png`; no sustituye un manual corporativo ni un master vectorial aprobado.
 
+> **Actualización 2026-10-02:** los logotipos vectoriales SVG del sistema de diseño Claude Design (`src/assets/brand/logispack-logo.svg`, `logispack-logo-white.svg`, `logispack-mark.svg`, `logispack-mark-white.svg`) sustituyen al raster PNG como master. Las referencias al raster en este manual quedan como histórico; la paleta oficial vive en `src/styles/tokens.css` (tokens `--logo-*`).
+
 ## Uso inmediato
 
 1. Usá el logotipo suministrado como una pieza única; no lo reconstruyas con CSS, tipografías ni iconos.
-2. Aplicá el tema web de trabajo oliva sólo mediante tokens semánticos.
+2. Aplicá el tema web (oliva, único) sólo mediante tokens.
 3. Antes de publicar, obtené la aprobación de la persona responsable de marca sobre este manual, los masters y las variantes de uso.
 
 ## La marca
@@ -44,7 +46,7 @@ No crear colores de marca por interpolación, filtros, opacidad ni gradientes nu
 
 El producto tiene aprobado para trabajo de UI el tema oliva: primario `#405329` y secundario `#A3A263`. Esta pareja es una **decisión de interfaz provisional**, separada de las muestras de color del logo: no reemplaza, corrige ni redefine los colores maestros de la marca. Implementarla exclusivamente mediante los tokens descritos en [Design System](./design-system.md).
 
-Decisión 2026-10-01: el tema oliva es el **tema principal** del sitio. Los colores del logo se ofrecen como **tema secundario opcional** (`data-theme="logo"`), seleccionado en el build y sin selector para el visitante. Los valores y reglas de contraste de ambos temas viven en [Design System](./design-system.md#theme-overrides).
+Decisión 2026-10-01/02: el sitio tiene un **único tema claro** con UI oliva. Se eliminaron los temas `olive`/`logo` y el atributo `data-theme`. Los colores del logo (`--logo-*`) son tokens para momentos de marca únicamente y no un tema seleccionable. Los valores y reglas de contraste viven en [Design System](./design-system.md).
 
 ## Fondos y contraste
 
