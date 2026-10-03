@@ -60,7 +60,7 @@ test.describe('every route', () => {
 
 test.describe('page templates', () => {
   for (const [name, route] of templates) {
-    test(`${name} has one h1, landmarks, metadata and no scripts`, async ({
+    test(`${name} has one h1, landmarks, metadata and scripts only on Home`, async ({
       page,
     }) => {
       await page.goto(route);
@@ -81,7 +81,8 @@ test.describe('page templates', () => {
         'href',
         `${SITE}${route}`,
       );
-      await expect(page.locator('script')).toHaveCount(0);
+      // Only Home carries JavaScript (the route-map island); every other route ships none
+      await expect(page.locator('script')).toHaveCount(route === '/' ? 1 : 0);
       expect(await page.locator('body').innerText()).not.toMatch(
         /tiempo real|rastrea/i,
       );

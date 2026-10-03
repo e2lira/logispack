@@ -73,7 +73,12 @@ const { serviceHref, class: className } = Astro.props;
         </svg>
         <div class="rm__track">
           <div class="rm__rider" data-rm-rider>
-            <span class="rm-marker" data-rm-marker aria-hidden="true">
+            <span
+              class="rm-marker"
+              data-rm-marker
+              data-label={copy.markerLabel}
+              aria-hidden="true"
+            >
               <Icon name="motorcycle" />
             </span>
           </div>
@@ -120,3 +125,7 @@ const { serviceHref, class: className } = Astro.props;
     </div>
   </div>
 </section>
+
+<script>
+  import '../scripts/route-map';
+</script>

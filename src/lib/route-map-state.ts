@@ -118,6 +118,8 @@ export function reduce(s: RouteMapState, e: RouteMapEvent): RouteMapState {
           ...s,
           open: true,
           pinned: e.source === 'touch',
+          // Enter/Space (or a screen reader) can only act on the focused marker
+          markerFocus: s.markerFocus || e.source === 'keyboard',
           hoverLatch: false,
           focusLatch: false,
         });

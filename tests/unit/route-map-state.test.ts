@@ -239,6 +239,15 @@ describe('coarse pointer and activation', () => {
     expect(s.focusLatch).toBe(true);
   });
 
+  it('keyboard activation counts as marker focus, so the popup survives the bridge delay', () => {
+    const s = run([
+      { type: 'activate', source: 'keyboard' },
+      { type: 'delay-elapsed' },
+    ]);
+    expect(s.open).toBe(true);
+    expect(s.markerFocus).toBe(true);
+  });
+
   it('a mouse click on an already open popup keeps it open', () => {
     const s = run([
       { type: 'marker-enter' },
