@@ -13,28 +13,54 @@ pnpm install
 pnpm dev
 ```
 
-| Script          | What it does                                                |
-| --------------- | ----------------------------------------------------------- |
-| `pnpm dev`      | Start the dev server                                        |
-| `pnpm build`    | Build the static site into `dist/`                          |
-| `pnpm preview`  | Serve `dist/` locally                                       |
-| `pnpm check`    | Type-check with `astro check`                               |
-| `pnpm lint`     | ESLint (astro + jsx-a11y)                                   |
-| `pnpm format`   | Prettier                                                    |
-| `pnpm test`     | Unit tests (Vitest)                                         |
-| `pnpm test:e2e` | Build, then run Playwright e2e + axe a11y (320px + desktop) |
+| Script               | What it does                                                        |
+| -------------------- | ------------------------------------------------------------------- |
+| `pnpm dev`           | Start the dev server                                                |
+| `pnpm build`         | Build the static site into `dist/`                                  |
+| `pnpm preview`       | Serve `dist/` locally                                               |
+| `pnpm check`         | Type-check with `astro check`                                       |
+| `pnpm lint`          | ESLint (astro + jsx-a11y)                                           |
+| `pnpm format`        | Prettier                                                            |
+| `pnpm test`          | Unit tests (Vitest)                                                 |
+| `pnpm test:e2e`      | Build, then run Playwright e2e + axe a11y (320px + desktop)         |
+| `pnpm lighthouse`    | Lighthouse CI (mobile budgets) against the built `dist/`            |
+| `pnpm release:check` | Build and verify `dist/` is releasable                              |
+| `pnpm og:image`      | Regenerate `public/og-image.jpg` (committed; not part of the build) |
 
 First e2e run: `pnpm exec playwright install chromium`. Playwright only serves `dist/` (`pnpm preview`); `pnpm test:e2e` rebuilds first so it never tests a stale build. Set `E2E_PORT` to change the preview port (default 4321). Astro allows one `astro preview` at a time, so stop any running preview first. CI builds once, then runs `pnpm exec playwright test`.
 
 ## Release (manual SFTP to HostingMX)
 
-Per [ADR 0002](docs/implementation-stack.md#deployment):
+Per [ADR 0002](docs/implementation-stack.md#deployment).
 
-1. `main` must be green in CI.
-2. Run `pnpm build` locally (or download the CI `dist` artifact).
-3. Upload the contents of `dist/` to the subdomain's document root via SFTP, replacing the previous release.
-4. Every route is a folder with `index.html` (`build.format: 'directory'`), so no server rewrites are needed.
-5. Keep the previous `dist/` copy locally for a manual rollback.
-6. Verify HTTPS and the live pages at https://logispack.capitalhumano.com.mx.
+### Before uploading
+
+1. `main` must be green in CI (lint, check, unit, e2e/a11y, Lighthouse CI).
+2. Run `pnpm release:check`. It builds and fails if `dist/` lacks `404.html`, `.htaccess`, `sitemap-index.xml`, `robots.txt`, or contains source maps or `*-high-res.*` originals. Alternatively download the `dist` artifact that CI attaches on `main`.
+3. Optional: `pnpm lighthouse` (needs Chrome; set `CHROME_PATH` if it is not auto-detected).
+
+### Upload
+
+1. Copy the previous release first: download the current document root (or keep the previous `dist/` folder) so a rollback is possible.
+2. Connect by SFTP to the subdomain's document root for `logispack.capitalhumano.com.mx`.
+3. Upload the **contents** of `dist/` (not the `dist` folder itself) into the document root, replacing the previous files.
+4. Make sure `.htaccess` was uploaded. It is a dotfile and many SFTP clients hide dotfiles: enable "show hidden files" (FileZilla: Server > Force showing hidden files) and confirm it is listed in the document root.
+5. Remove files from the previous release that no longer exist in `dist/` (hashed files in `_astro/` change on every build).
+
+`.htaccess` is only honoured by Apache and LiteSpeed; Nginx ignores it, so HTTPS redirect, custom 404 and cache headers would then have to be configured in the HostingMX panel. Every directive group is wrapped in `<IfModule>`, so an unavailable module cannot cause a 500 error. The Content-Security-Policy is strict (`script-src 'self'`, `style-src 'self'`); only `style="..."` attributes are allowed inline.
+
+### Rollback
+
+Re-upload the previous `dist/` contents over the document root (or restore the document-root backup from step 1 of the upload) and delete files that only exist in the bad release. Static files only: there is no database or server state to revert.
+
+### Post-release smoke checks
+
+1. `curl -sI http://logispack.capitalhumano.com.mx/` returns `301` with `Location: https://...`.
+2. `https://logispack.capitalhumano.com.mx/` loads with a valid certificate and the shell (header, footer, WhatsApp link).
+3. A missing URL such as `/no-existe/` returns status `404` and shows "Página no encontrada".
+4. `/sitemap-index.xml` and `/robots.txt` load; the sitemap lists 16 URLs.
+5. A service page loads, for example `/servicios/servicio-de-reparto/`, with images and fonts.
+6. `curl -sI https://logispack.capitalhumano.com.mx/` shows the security headers (`Content-Security-Policy`, `X-Content-Type-Options`) and a `/_astro/...` asset shows `Cache-Control: public, max-age=31536000, immutable`.
+7. Open the Home in a browser console: no CSP violations and the route map renders.
 
 Open items: confirm the HostingMX web server type (Apache vs LiteSpeed/Nginx), the document root, and the SSL certificate for the subdomain.
