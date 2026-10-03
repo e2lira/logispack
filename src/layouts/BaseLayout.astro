@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import sourceSans400 from '@fontsource/source-sans-3/files/source-sans-3-latin-400-normal.woff2?url';
+import sourceSans600 from '@fontsource/source-sans-3/files/source-sans-3-latin-600-normal.woff2?url';
 import lexend700 from '@fontsource/lexend/files/lexend-latin-700-normal.woff2?url';
 import mark from '../assets/brand/logispack-mark.svg';
 import Header from '../components/Header.astro';
@@ -28,6 +29,13 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
     <link
       rel="preload"
       href={sourceSans400}
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href={sourceSans600}
       as="font"
       type="font/woff2"
       crossorigin

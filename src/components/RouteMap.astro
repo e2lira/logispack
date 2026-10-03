@@ -1,0 +1,133 @@
+---
+import Button from './Button.astro';
+import Icon from './Icon.astro';
+import RouteMapRows from './RouteMapRows.astro';
+import { contact } from '../lib/contact';
+import { routeMapCopy as copy } from '../lib/route-map-copy';
+import '../styles/route-map.css';
+
+interface Props {
+  /** URL of the "Servicio de reparto" page. */
+  serviceHref: string;
+  class?: string;
+}
+
+const { serviceHref, class: className } = Astro.props;
+---
+
+<section
+  class:list={['section', 'rm', className]}
+  id="ruta"
+  aria-labelledby="ruta-title"
+  data-route-map
+>
+  <div class="container">
+    <h2 id="ruta-title">{copy.heading}</h2>
+    <div class="rm__layout">
+      <div class="rm__map">
+        <div class="rm__stage" data-rm-stage>
+          <!-- Decorative art: token-driven, no tiles, no third-party requests -->
+          <svg
+            class="rm__art"
+            viewBox="0 0 480 360"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <rect class="m-land" width="480" height="360"></rect>
+            <rect
+              class="m-park"
+              x="22"
+              y="30"
+              width="118"
+              height="92"
+              rx="10"
+            ></rect>
+            <rect
+              class="m-park"
+              x="238"
+              y="212"
+              width="132"
+              height="86"
+              rx="10"
+            ></rect>
+            <rect
+              class="m-park"
+              x="352"
+              y="150"
+              width="96"
+              height="40"
+              rx="10"
+            ></rect>
+            <path
+              class="m-water"
+              d="M-10 330 C 90 306 150 346 250 332 S 410 304 490 326"
+            ></path>
+            <path
+              class="m-street"
+              d="M0 40H480M0 110H480M0 200H480M0 262H480M70 0V360M150 0V360M220 0V360M340 0V360M410 0V360"
+            ></path>
+            <path class="m-route" d="M70 290V200H220V110H410V60"></path>
+            <circle class="m-origin" cx="70" cy="290" r="12"></circle>
+            <circle class="m-pin-dot" cx="70" cy="290" r="4"></circle>
+            <circle class="m-dest" cx="410" cy="60" r="12"></circle>
+            <circle class="m-pin-dot" cx="410" cy="60" r="4"></circle>
+          </svg>
+          <div class="rm__track">
+            <div class="rm__rider" data-rm-rider>
+              <span
+                class="rm-marker"
+                data-rm-marker
+                data-label={copy.markerLabel}
+                aria-hidden="true"
+              >
+                <Icon name="motorcycle" />
+              </span>
+            </div>
+          </div>
+        </div>
+        <div
+          class="rm-pop"
+          id="rm-popup"
+          role="dialog"
+          aria-labelledby="rm-popup-title"
+          hidden
+          data-rm-popup
+        >
+          <div class="rm-pop__head">
+            <h3 id="rm-popup-title">{copy.title}</h3>
+            <button
+              class="rm-pop__close"
+              type="button"
+              aria-label={copy.closeLabel}
+              data-rm-close
+            >
+              <Icon name="x" />
+            </button>
+          </div>
+          <p class="rm-pop__note">{copy.disclaimer}</p>
+          <RouteMapRows />
+        </div>
+      </div>
+      <div class="rm__info">
+        <p class="rm__text" id="rm-text">
+          {copy.textEquivalent}
+        </p>
+        <aside class="rm-sample" aria-labelledby="rm-sample-title">
+          <h3 id="rm-sample-title">{copy.title}</h3>
+          <p class="rm-pop__note">{copy.disclaimer}</p>
+          <RouteMapRows />
+        </aside>
+        <div class="actions">
+          <Button href={contact.whatsappUrl}>{contact.whatsappLabel}</Button>
+          <Button href={serviceHref} variant="outline">
+            {copy.serviceLinkLabel}
+          </Button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import '../scripts/route-map';
+</script>

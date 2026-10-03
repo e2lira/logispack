@@ -8,6 +8,7 @@ import Icon from '../components/Icon.astro';
 import InfoNote from '../components/InfoNote.astro';
 import Media from '../components/Media.astro';
 import ProcessSteps from '../components/ProcessSteps.astro';
+import RouteMap from '../components/RouteMap.astro';
 import TrustList from '../components/TrustList.astro';
 import { getFamilyGroups } from '../lib/catalog';
 import { contact } from '../lib/contact';
@@ -16,6 +17,10 @@ import { photos } from '../lib/photos';
 
 const groups = await getFamilyGroups();
 const heroPhoto = photos.hero;
+const deliveryService = groups
+  .flatMap(({ services }) => services)
+  .find((service) => service.data.name === 'Servicio de reparto');
+if (!deliveryService) throw new Error('Servicio de reparto not found');
 ---
 
 <BaseLayout
@@ -82,29 +87,30 @@ const heroPhoto = photos.hero;
     </div>
   </section>
 
-  <section
-    class="section section--subtle"
-    id="confianza"
-    aria-labelledby="confianza-title"
-  >
+  <RouteMap
+    class="section--subtle"
+    serviceHref={`/servicios/${deliveryService.id}/`}
+  />
+
+  <section class="section" id="confianza" aria-labelledby="confianza-title">
     <div class="container">
       <h2 id="confianza-title">Por qué Logispack</h2>
       <TrustList />
     </div>
   </section>
 
-  <section class="section" id="proceso" aria-labelledby="proceso-title">
+  <section
+    class="section section--subtle"
+    id="proceso"
+    aria-labelledby="proceso-title"
+  >
     <div class="container">
       <h2 id="proceso-title">Cómo trabajamos</h2>
       <ProcessSteps />
     </div>
   </section>
 
-  <section
-    class="section section--subtle"
-    id="faq-preview"
-    aria-labelledby="faq-preview-title"
-  >
+  <section class="section" id="faq-preview" aria-labelledby="faq-preview-title">
     <div class="container">
       <h2 id="faq-preview-title">Preguntas frecuentes</h2>
       <FaqList limit={3} />
