@@ -115,6 +115,8 @@
   box-shadow: var(--shadow-card);
   color: var(--on-olive);
   pointer-events: auto;
+  /* The touch tap highlight paints a square box; the marker draws its own state */
+  -webkit-tap-highlight-color: transparent;
 }
 
 button.rm-marker {

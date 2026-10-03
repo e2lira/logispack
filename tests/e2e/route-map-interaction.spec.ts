@@ -65,6 +65,21 @@ test.describe('route map interaction (fine pointer and keyboard)', () => {
     }
   });
 
+  test('every layer painted around the marker is circular', async ({
+    page,
+  }) => {
+    const layers = await marker(page).evaluate((el) => {
+      const s = getComputedStyle(el);
+      return {
+        radius: s.borderTopLeftRadius,
+        // The touch tap highlight is a square box unless made transparent
+        tapHighlight: s.getPropertyValue('-webkit-tap-highlight-color'),
+      };
+    });
+    expect(layers.radius).toBe('50%');
+    expect(layers.tapHighlight).toBe('rgba(0, 0, 0, 0)');
+  });
+
   test('hover opens the labelled popup', async ({ page }) => {
     await marker(page).hover();
     await expect(popup(page)).toBeVisible();
