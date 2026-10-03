@@ -1,0 +1,27 @@
+---
+import Button from '../components/Button.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { contact } from '../lib/contact';
+---
+
+<BaseLayout
+  title="Página no encontrada | Logispack"
+  description="La página que busca no existe o fue movida."
+  noindex
+>
+  <section class="hero hero--page">
+    <div class="container">
+      <h1>Página no encontrada</h1>
+      <p class="lead">
+        La página que busca no existe o fue movida. Puede volver al inicio o
+        consultar nuestros servicios.
+      </p>
+      <div class="actions">
+        <Button href="/">Volver al inicio</Button>
+        <Button href={contact.whatsappUrl} variant="outline">
+          {contact.whatsappLabel}
+        </Button>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

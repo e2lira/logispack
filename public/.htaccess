@@ -1,0 +1,55 @@
+# Logispack - Apache / LiteSpeed configuration.
+#
+# NOTE: the HostingMX server type is not confirmed yet. This file is only honoured
+# by Apache and LiteSpeed; Nginx ignores it silently. Every group is wrapped in
+# <IfModule> so a missing module never produces a 500 error.
+# Upload it with the rest of dist/ (it is a dotfile: make the SFTP client show
+# hidden files).
+
+# --- Custom 404 (core directive) -------------------------------------------
+ErrorDocument 404 /404.html
+
+# --- Force HTTPS (301) ------------------------------------------------------
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# --- MIME types -------------------------------------------------------------
+<IfModule mod_mime.c>
+  AddType image/avif .avif
+  AddType image/webp .webp
+  AddType font/woff2 .woff2
+  AddType image/svg+xml .svg .svgz
+  AddType application/xml .xml
+</IfModule>
+
+# --- Compression ------------------------------------------------------------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css text/xml
+  AddOutputFilterByType DEFLATE application/javascript text/javascript application/json
+  AddOutputFilterByType DEFLATE application/xml application/ld+json image/svg+xml
+</IfModule>
+
+# --- Cache policy and security headers --------------------------------------
+<IfModule mod_headers.c>
+  # Hashed build assets never change under the same name.
+  <LocationMatch "^/_astro/">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </LocationMatch>
+
+  # HTML, sitemap and robots must always be revalidated.
+  <FilesMatch "\.(html|xml|txt)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  # Scripts and stylesheets are external files (build.inlineStylesheets: 'never');
+  # only style="" attributes (custom properties on <figure>) need 'unsafe-inline'.
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self'; style-src-attr 'unsafe-inline'; img-src 'self' data:; font-src 'self'; object-src 'none'; frame-ancestors 'self'; base-uri 'self'; form-action 'none'"
+</IfModule>
