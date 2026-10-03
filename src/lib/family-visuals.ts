@@ -7,7 +7,7 @@ import type { Photo } from './photos';
 export type DiscTone = 'deep' | 'olive' | 'red';
 
 export interface FamilyVisual {
-  /** Native widths are 447-455px: card image bands must never render wider than 447px. */
+  /** 1400px-wide sources can fill the responsive card grid without upscaling. */
   photo: Photo;
   icon: IconName;
   tone: DiscTone;

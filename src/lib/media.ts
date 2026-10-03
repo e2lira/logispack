@@ -7,6 +7,8 @@ export interface MediaInput {
   width?: number;
   height?: number;
   sizes?: string;
+  /** Candidate widths for srcset; keep each at or below the source width. */
+  widths?: number[];
 }
 
 export interface ResolvedMedia {
@@ -17,6 +19,7 @@ export interface ResolvedMedia {
   /** CSS aspect-ratio value that reserves space before the image loads. */
   ratio: string;
   sizes: string;
+  widths: number[] | undefined;
   formats: ['avif', 'webp'];
 }
 
@@ -35,6 +38,7 @@ export function resolveMedia(input: MediaInput): ResolvedMedia {
     height,
     ratio: `${width} / ${height}`,
     sizes: input.sizes ?? DEFAULT_SIZES,
+    widths: input.widths,
     formats: ['avif', 'webp'],
   };
 }

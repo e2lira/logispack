@@ -4,8 +4,9 @@ import { getFamilyVisual } from '../../src/lib/family-visuals';
 import { iconNames } from '../../src/lib/icons';
 import { photos } from '../../src/lib/photos';
 
-/** Narrowest native width of the family photos (packing.jpg): card slots must never exceed it. */
-const NATIVE_WIDTHS = { hero: 380, family: 447 };
+const HERO_SIZE = { width: 1200, height: 1040 };
+const FAMILY_SIZE = { width: 1400, height: 800 };
+const LAYOUT_WIDTHS = { hero: 600, family: 1400 };
 
 describe('family visuals', () => {
   it.each(families.map((f) => f.id))(
@@ -13,9 +14,8 @@ describe('family visuals', () => {
     (id) => {
       const visual = getFamilyVisual(id);
       expect(visual.photo.alt.trim().length).toBeGreaterThan(20);
-      expect(visual.photo.image.width).toBeGreaterThanOrEqual(
-        NATIVE_WIDTHS.family,
-      );
+      expect(visual.photo.image.width).toBe(FAMILY_SIZE.width);
+      expect(visual.photo.image.height).toBe(FAMILY_SIZE.height);
       expect(iconNames).toContain(visual.icon);
       expect(['deep', 'olive', 'red']).toContain(visual.tone);
     },
@@ -36,6 +36,9 @@ describe('hero photo', () => {
     expect(photos.hero?.alt).toBe(
       'Repartidor de Logispack con un paquete frente al Ángel de la Independencia',
     );
-    expect(photos.hero?.image.width).toBe(NATIVE_WIDTHS.hero);
+    expect(photos.hero?.image.width).toBe(HERO_SIZE.width);
+    expect(photos.hero?.image.height).toBe(HERO_SIZE.height);
+    expect(LAYOUT_WIDTHS.hero).toBeLessThanOrEqual(HERO_SIZE.width);
+    expect(LAYOUT_WIDTHS.family).toBeLessThanOrEqual(FAMILY_SIZE.width);
   });
 });
