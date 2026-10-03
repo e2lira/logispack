@@ -1,0 +1,19 @@
+---
+import Icon from './Icon.astro';
+import type { IconName } from '../lib/icons';
+import { routeMapCopy } from '../lib/route-map-copy';
+
+const icons: IconName[] = ['user', 'package', 'map-pin'];
+---
+
+<dl class="rm-rows">
+  {routeMapCopy.rows.map((row, i) => (
+    <div class="rm-row">
+      <dt>
+        <Icon name={icons[i] ?? 'info'} size="sm" />
+        {row.label}
+      </dt>
+      <dd>{row.value}</dd>
+    </div>
+  ))}
+</dl>

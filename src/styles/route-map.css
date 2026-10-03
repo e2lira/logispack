@@ -1,0 +1,293 @@
+/*
+ * Illustrative route map. Every color comes from design tokens. The marker's
+ * travel is a CSS keyframe animation, declared only under
+ * prefers-reduced-motion: no-preference; otherwise the marker sits at a fixed
+ * point on the route. Percentages map 1:1 onto the SVG viewBox (480 x 360).
+ */
+
+.rm__layout {
+  display: grid;
+  gap: var(--space-6);
+}
+
+@media (min-width: 64rem) {
+  .rm__layout {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    align-items: center;
+    gap: var(--space-12);
+  }
+}
+
+.rm__stage {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-lg);
+  background: var(--map-land);
+}
+
+.rm__art {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+.rm__art .m-land {
+  fill: var(--map-land);
+}
+
+.rm__art .m-park {
+  fill: var(--map-park);
+}
+
+.rm__art .m-water {
+  fill: none;
+  stroke: var(--map-water);
+  stroke-width: 22;
+  stroke-linecap: round;
+}
+
+.rm__art .m-street {
+  fill: none;
+  stroke: var(--map-street);
+  stroke-width: 5;
+}
+
+.rm__art .m-route {
+  fill: none;
+  stroke: var(--forest-900);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.rm__art .m-origin {
+  fill: var(--pin-origin);
+}
+
+.rm__art .m-dest {
+  fill: var(--pin-destination);
+}
+
+.rm__art .m-pin-dot {
+  fill: var(--surface-raised);
+}
+
+/* Clips the translated rider layer so it never widens the page */
+.rm__track {
+  position: absolute;
+  inset: 0;
+  overflow: clip;
+  border-radius: var(--radius-lg);
+  pointer-events: none;
+}
+
+/* The rider layer is exactly the stage box, so translate % tracks the map */
+.rm__rider {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* Static position (reduced motion, no animation): on the first long street */
+  translate: 30.2% 55.56%;
+}
+
+.rm-marker {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  display: grid;
+  place-items: center;
+  width: var(--marker);
+  height: var(--marker);
+  min-width: var(--tap-min);
+  min-height: var(--tap-min);
+  margin: calc(var(--marker) / -2) 0 0 calc(var(--marker) / -2);
+  padding: 0;
+  border: 3px solid var(--surface-raised);
+  border-radius: 50%;
+  background: var(--forest-800);
+  box-shadow: var(--shadow-card);
+  color: var(--on-olive);
+  pointer-events: auto;
+}
+
+button.rm-marker {
+  cursor: pointer;
+  font: inherit;
+}
+
+span.rm-marker {
+  pointer-events: none;
+}
+
+@media (hover: hover) {
+  button.rm-marker:hover {
+    box-shadow: 0 0 0 10px var(--halo-hover);
+  }
+}
+
+button.rm-marker[aria-expanded="true"] {
+  box-shadow: 0 0 0 10px var(--halo-tap);
+}
+
+/* Focus ring wins over the halos (specificity), same pair as the global ring */
+button.rm-marker:focus-visible {
+  outline: 2px solid var(--focus-inner);
+  outline-offset: 0;
+  box-shadow: 0 0 0 5px var(--focus-ring);
+}
+
+/* Popup: non-modal, positioned by the island inside the stage box */
+.rm-pop {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  z-index: 2;
+  width: min(18rem, 100%);
+  padding: var(--space-3) var(--space-4) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-pop);
+  color: var(--ink);
+}
+
+.rm-pop[hidden] {
+  display: none;
+}
+
+.rm-pop__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-block-end: var(--space-2);
+}
+
+.rm-pop h3,
+.rm-sample h3 {
+  font-size: 1.125rem;
+  line-height: 1.33;
+}
+
+.rm-pop__close {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--tap-min);
+  height: var(--tap-min);
+  margin: calc(var(--space-2) * -1) calc(var(--space-3) * -1)
+    calc(var(--space-2) * -1) 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.rm-pop__note {
+  margin: 0 0 var(--space-3);
+  font-size: 0.875rem;
+  line-height: 1.36;
+}
+
+.rm-rows {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.rm-row {
+  display: grid;
+  gap: var(--space-1);
+  font-size: 0.875rem;
+  line-height: 1.36;
+}
+
+.rm-row dt {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--olive-900);
+  font-weight: 600;
+}
+
+.rm-row dd {
+  margin: 0;
+  padding-inline-start: 28px;
+}
+
+.rm__text {
+  margin: 0 0 var(--space-4);
+}
+
+.rm-sample {
+  margin-block-end: var(--space-6);
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-card);
+}
+
+.rm-sample h3 {
+  margin-block-end: var(--space-2);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .rm__rider {
+    animation: rm-travel 16s linear infinite;
+  }
+
+  /* Hovering or focusing the marker, or an open popup, freezes the traversal */
+  .rm__rider:has(.rm-marker:hover),
+  .rm__rider:has(.rm-marker:focus-visible),
+  .rm[data-state="open"] .rm__rider {
+    animation-play-state: paused;
+  }
+
+  @keyframes rm-travel {
+    0% {
+      translate: 14.58% 80.56%;
+      opacity: 0;
+    }
+
+    4% {
+      translate: 14.58% 80.56%;
+      opacity: 1;
+    }
+
+    17.6% {
+      translate: 14.58% 55.56%;
+    }
+
+    40.2% {
+      translate: 45.83% 55.56%;
+    }
+
+    53.8% {
+      translate: 45.83% 30.56%;
+    }
+
+    82.5% {
+      translate: 85.42% 30.56%;
+    }
+
+    90% {
+      translate: 85.42% 16.67%;
+    }
+
+    94% {
+      translate: 85.42% 16.67%;
+      opacity: 1;
+    }
+
+    100% {
+      translate: 85.42% 16.67%;
+      opacity: 0;
+    }
+  }
+}

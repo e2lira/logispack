@@ -2,8 +2,11 @@ import caretRight from '@phosphor-icons/core/assets/regular/caret-right.svg?raw'
 import check from '@phosphor-icons/core/assets/regular/check.svg?raw';
 import info from '@phosphor-icons/core/assets/regular/info.svg?raw';
 import mapPin from '@phosphor-icons/core/assets/regular/map-pin.svg?raw';
+import motorcycle from '@phosphor-icons/core/assets/regular/motorcycle.svg?raw';
 import packageIcon from '@phosphor-icons/core/assets/regular/package.svg?raw';
+import user from '@phosphor-icons/core/assets/regular/user.svg?raw';
 import users from '@phosphor-icons/core/assets/regular/users.svg?raw';
+import x from '@phosphor-icons/core/assets/regular/x.svg?raw';
 
 /**
  * Phosphor Icons (MIT), Regular weight, inlined at build time. Register an icon
@@ -14,8 +17,11 @@ const icons = {
   'caret-right': caretRight,
   info,
   'map-pin': mapPin,
+  motorcycle,
   package: packageIcon,
+  user,
   users,
+  x,
 } as const;
 
 export type IconName = keyof typeof icons;
