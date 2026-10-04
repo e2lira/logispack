@@ -1,20 +1,44 @@
 # Logispack - Apache / LiteSpeed configuration.
 #
+# Written for shared hosting: only directives allowed in .htaccess with a
+# limited AllowOverride. Do NOT add <Location>, <Directory>, Options or Require
+# here: they need server config or AllowOverride Options/AuthConfig and would
+# answer 500 for the whole site when the host does not grant them.
+#
 # NOTE: the HostingMX server type is not confirmed yet. This file is only honoured
 # by Apache and LiteSpeed; Nginx ignores it silently. Every group is wrapped in
 # <IfModule> so a missing module never produces a 500 error.
 # Upload it with the rest of dist/ (it is a dotfile: make the SFTP client show
 # hidden files).
+#
+# Directory listing: "Options -Indexes" is intentionally omitted (it needs
+# AllowOverride Options). Risk is low: Astro emits an index.html in every route
+# directory and /_astro/ has no listing worth exposing. Still, disable
+# directory indexes in the hosting panel.
 
 # --- Custom 404 (core directive) -------------------------------------------
 ErrorDocument 404 /404.html
 
 # --- Force HTTPS (301) ------------------------------------------------------
+# !!! CONFIRM THAT SSL IS ACTIVE ON THE SUBDOMAIN BEFORE UPLOADING THIS FILE !!!
+# Without a valid certificate every visit is redirected to a broken https:// URL.
+# To disable temporarily, comment out the three Rewrite lines below (the
+# RewriteCond lines and the redirect RewriteRule) and re-upload.
+# HSTS is deliberately left out: add Strict-Transport-Security only after SSL is
+# confirmed working, starting with a short max-age=300 and raising it gradually.
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteCond %{HTTPS} !=on
   RewriteCond %{HTTP:X-Forwarded-Proto} !https
   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # Block dotfiles and dot-directories (.git, .env, .htaccess...), but keep
+  # /.well-known/ reachable (ACME / SSL validation). Uses mod_rewrite instead of
+  # "Require" because that needs AllowOverride AuthConfig.
+  RewriteRule "(^|/)\.(?!well-known/)" - [F,L]
+
+  # Flag hashed build assets so mod_headers can mark them immutable.
+  RewriteRule ^_astro/ - [E=IMMUTABLE_ASSET:1]
 </IfModule>
 
 # --- MIME types -------------------------------------------------------------
@@ -35,14 +59,24 @@ ErrorDocument 404 /404.html
 
 # --- Cache policy and security headers --------------------------------------
 <IfModule mod_headers.c>
-  # Hashed build assets never change under the same name.
-  <LocationMatch "^/_astro/">
-    Header set Cache-Control "public, max-age=31536000, immutable"
-  </LocationMatch>
-
   # HTML, sitemap and robots must always be revalidated.
   <FilesMatch "\.(html|xml|txt)$">
     Header set Cache-Control "no-cache"
+  </FilesMatch>
+
+  # Non-hashed static files: one week.
+  <FilesMatch "\.(jpg|jpeg|png|webp|avif|ico|svg|woff2)$">
+    Header set Cache-Control "public, max-age=604800"
+  </FilesMatch>
+
+  # Hashed build assets never change under the same name. This block MUST stay
+  # after the rules above: within the same scope the last matching Header set
+  # wins, so immutable overrides the one-week rule for /_astro/. The env flag is
+  # set by the rewrite rule above; Apache prefixes env vars with REDIRECT_ after
+  # an internal redirect, so both names are matched.
+  <FilesMatch "\.[A-Za-z0-9]+$">
+    Header set Cache-Control "public, max-age=31536000, immutable" env=IMMUTABLE_ASSET
+    Header set Cache-Control "public, max-age=31536000, immutable" env=REDIRECT_IMMUTABLE_ASSET
   </FilesMatch>
 
   Header always set X-Content-Type-Options "nosniff"
