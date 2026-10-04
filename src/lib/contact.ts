@@ -12,6 +12,7 @@ export const contact = {
       label: 'WhatsApp',
     },
     { display: '54 44 57 58 87', href: 'tel:+525444575887', label: 'Teléfono' },
+    { display: '55 35 68 95 49', href: 'tel:+525535689549', label: 'Celular' },
   ],
   email: 'alfredocervantess@live.com.mx',
   address:

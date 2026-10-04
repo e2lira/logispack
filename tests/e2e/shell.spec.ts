@@ -33,6 +33,9 @@ test.describe('shell', () => {
     await expect(page.locator('footer a[href="tel:+525444575887"]')).toHaveText(
       '54 44 57 58 87',
     );
+    await expect(page.locator('footer a[href="tel:+525535689549"]')).toHaveText(
+      '55 35 68 95 49',
+    );
     await expect(
       page.locator('footer a[href="mailto:alfredocervantess@live.com.mx"]'),
     ).toBeVisible();
