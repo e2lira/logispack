@@ -29,7 +29,7 @@ pnpm dev
 
 First e2e run: `pnpm exec playwright install chromium`. Playwright only serves `dist/` (`pnpm preview`); `pnpm test:e2e` rebuilds first so it never tests a stale build. Set `E2E_PORT` to change the preview port (default 4321). Astro allows one `astro preview` at a time, so stop any running preview first. CI builds once, then runs `pnpm exec playwright test`.
 
-## Release (manual SFTP to HostingMX)
+## Release (manual SFTP to HospedandoMX)
 
 Per [ADR 0002](docs/implementation-stack.md#deployment).
 
@@ -47,7 +47,7 @@ Per [ADR 0002](docs/implementation-stack.md#deployment).
 4. **Confirm SSL is active on the subdomain before uploading `.htaccess`** (it forces HTTPS; to disable it temporarily, comment out the redirect rules). Then make sure `.htaccess` was uploaded. It is a dotfile and many SFTP clients hide dotfiles: enable "show hidden files" (FileZilla: Server > Force showing hidden files) and confirm it is listed in the document root.
 5. Remove files from the previous release that no longer exist in `dist/` (hashed files in `_astro/` change on every build).
 
-`.htaccess` is only honoured by Apache and LiteSpeed; Nginx ignores it, so HTTPS redirect, custom 404 and cache headers would then have to be configured in the HostingMX panel. Every directive group is wrapped in `<IfModule>`, so an unavailable module cannot cause a 500 error. The Content-Security-Policy is strict (`script-src 'self'`, `style-src 'self'`); only `style="..."` attributes are allowed inline.
+`.htaccess` is only honoured by Apache and LiteSpeed; Nginx ignores it, so HTTPS redirect, custom 404 and cache headers would then have to be configured in the HospedandoMX panel. Every directive group is wrapped in `<IfModule>`, so an unavailable module cannot cause a 500 error. The Content-Security-Policy is strict (`script-src 'self'`, `style-src 'self'`); only `style="..."` attributes are allowed inline.
 
 ### Rollback
 
@@ -63,4 +63,4 @@ Re-upload the previous `dist/` contents over the document root (or restore the d
 6. `curl -sI https://logispack.capitalhumano.com.mx/` shows the security headers (`Content-Security-Policy`, `X-Content-Type-Options`) and a `/_astro/...` asset shows `Cache-Control: public, max-age=31536000, immutable`.
 7. Open the Home in a browser console: no CSP violations and the route map renders.
 
-Open items: confirm the HostingMX web server type (Apache vs LiteSpeed/Nginx), the document root, and the SSL certificate for the subdomain.
+Open items: confirm the HospedandoMX web server type (Apache vs LiteSpeed/Nginx), the document root, and the SSL certificate for the subdomain.

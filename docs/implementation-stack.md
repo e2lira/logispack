@@ -25,7 +25,7 @@ Logispack v1 is a content marketing site with no backend, no contact form, no an
 | E2E / a11y tests | Playwright + `@axe-core/playwright`; serves `dist/` with `pnpm preview` on port 4321, override with `E2E_PORT` | Deterministic 320px, keyboard, pointer, touch, Escape, and reduced-motion tests required by RFC 0001 |
 | Lint / format | ESLint (`eslint-plugin-astro`, `eslint-plugin-jsx-a11y`) + Prettier | Consistent code and static a11y checks |
 | CI | GitHub Actions: install → lint → typecheck (`astro check`) → unit → build → e2e/a11y | Required PR gate |
-| Hosting | HostingMX shared hosting; manual SFTP upload of the built `dist/` folder | Owner-managed; no build runs on the server |
+| Hosting | HospedandoMX shared hosting; manual SFTP upload of the built `dist/` folder | Owner-managed; no build runs on the server |
 | Domain | `https://logispack.capitalhumano.com.mx` (set as Astro `site`) | Canonical URLs, sitemap, and Open Graph tags derive from it |
 
 ## Constraints
@@ -45,9 +45,9 @@ Logispack v1 is a content marketing site with no backend, no contact form, no an
 1. CI builds and tests every PR; `main` must be green before a release.
 2. Release: run `pnpm build` locally (or download the CI `dist` artifact) and upload the contents of `dist/` to the subdomain's document root via SFTP, replacing the previous release.
 3. Use Astro `build.format: 'directory'` so every route is a folder with `index.html` and works on any static server without rewrites.
-4. Ship a `public/.htaccess` (if the server is Apache, verify with HostingMX) for HTTPS redirect, the custom `404.html`, and long-lived caching of hashed `/_astro/` assets.
+4. Ship a `public/.htaccess` (if the server is Apache, verify with HospedandoMX) for HTTPS redirect, the custom `404.html`, and long-lived caching of hashed `/_astro/` assets.
 5. Keep the previous `dist/` copy locally for a manual rollback.
 
 ## Open questions
 
-1. Confirm the HostingMX web server (Apache vs LiteSpeed/Nginx), the document root for the subdomain, and that an SSL certificate is issued for `logispack.capitalhumano.com.mx`.
+1. Confirm the HospedandoMX web server (Apache vs LiteSpeed/Nginx), the document root for the subdomain, and that an SSL certificate is issued for `logispack.capitalhumano.com.mx`.
