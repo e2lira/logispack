@@ -81,8 +81,11 @@ test.describe('page templates', () => {
         'href',
         `${SITE}${route}`,
       );
-      // Only Home carries JavaScript (the route-map island); every other route ships none
-      await expect(page.locator('script')).toHaveCount(route === '/' ? 1 : 0);
+      // Only Home carries JavaScript (the route-map island); every other route ships none.
+      // JSON-LD blocks are inert data, not executable script.
+      await expect(
+        page.locator('script:not([type="application/ld+json"])'),
+      ).toHaveCount(route === '/' ? 1 : 0);
       expect(await page.locator('body').innerText()).not.toMatch(
         /tiempo real|rastrea/i,
       );

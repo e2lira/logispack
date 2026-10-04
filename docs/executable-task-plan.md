@@ -40,7 +40,7 @@ Phase 0 (PR #3), Phase 1 (PR #5), design system (PR #6), photography (PR #7), Ph
 - [x] 0.4 Test-first: `tokens.css` exposes the design-system tokens (single light theme) and each documented pairing meets its contrast ratio (unit test parses tokens). Implement `src/styles/tokens.css`. **[Design: palette]**
 - [x] 0.5 Test-first: shell with skip link, `header`/`main`/`footer` landmarks, `lang="es-MX"`, visible `:focus-visible` (2px outline plus yellow ring), footer on `--olive-900` with `data-surface="inverse"`, white logo, both phones, email, address, hours, and WhatsApp CTA `https://wa.me/525544792696`. **[G2, G4, IA 6, PRD: contact]**
 - [x] 0.6 Self-host fonts (Lexend, Source Sans 3) with `font-display: swap` and preload; test asserts no external font/script requests. **[ADR 0002, PRD: privacy]**
-- [ ] 0.7 (pending owner: manual SFTP dry run) Release dry-run: build, upload `dist/` via SFTP to HostingMX, verify HTTPS and the skeleton live. **Done:** skeleton reachable at the production URL. **[ADR 0002: deployment]**
+- [ ] 0.7 (pending owner: manual SFTP dry run) Release dry-run: build, upload `dist/` via SFTP to HospedandoMX, verify HTTPS and the skeleton live. **Done:** skeleton reachable at the production URL. **[ADR 0002: deployment]**
 
 ## Phase 1: Content pages (PR 2; after 0)
 
@@ -62,7 +62,7 @@ Phase 0 (PR #3), Phase 1 (PR #5), design system (PR #6), photography (PR #7), Ph
 ## Phase 3: Release hardening (PR 4; after 2)
 
 - [ ] 3.1 SEO: per-page title/description, canonical, Open Graph image, `sitemap.xml` (`@astrojs/sitemap`), `robots.txt`, favicon set. **[PRD: discoverability]**
-- [ ] 3.2 Custom `404.html` and `public/.htaccess` (HTTPS redirect, 404, cache headers) after confirming the HostingMX server type. **[ADR 0002: deployment]**
+- [ ] 3.2 Custom `404.html` and `public/.htaccess` (HTTPS redirect, 404, cache headers) after confirming the HospedandoMX server type. **[ADR 0002: deployment]**
 - [ ] 3.3 Lighthouse CI against budgets; fix regressions. **[Working agreements]**
 - [ ] 3.4 Production release via SFTP; smoke-test live pages; keep previous `dist/` for rollback. **[ADR 0002: deployment]**
 
