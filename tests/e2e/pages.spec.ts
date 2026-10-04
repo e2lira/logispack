@@ -358,6 +358,7 @@ test.describe('contacto', () => {
     ).toHaveAttribute('href', 'https://wa.me/525544792696');
     await expect(main.locator('a[href="tel:+525544792696"]')).toBeVisible();
     await expect(main.locator('a[href="tel:+525444575887"]')).toBeVisible();
+    await expect(main.locator('a[href="tel:+525535689549"]')).toBeVisible();
     await expect(
       main.locator('a[href="mailto:alfredocervantess@live.com.mx"]'),
     ).toBeVisible();

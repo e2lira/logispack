@@ -16,6 +16,15 @@ describe('contact copy', () => {
     expect(contact.phones[0]?.label).toBe('WhatsApp');
     expect(contact.phones[1]?.label).toBe('Teléfono');
   });
+
+  it('lists the third mobile number', () => {
+    expect(contact.phones).toHaveLength(3);
+    expect(contact.phones[2]).toEqual({
+      display: '55 35 68 95 49',
+      href: 'tel:+525535689549',
+      label: 'Celular',
+    });
+  });
 });
 
 describe('global.css', () => {
