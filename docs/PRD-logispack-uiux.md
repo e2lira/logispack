@@ -44,7 +44,7 @@ The content inventory below was observed directly on `https://logispack.com.mx/`
 | Credibility | 25+ years, REPSE, personal certificado, servicios premium, atención personalizada, operación sin fricciones | Trust band with only business-approved proof points |
 | Process | Diagnóstico → Propuesta → Arranque → Seguimiento | Four-step process section |
 | FAQ | REPSE importance; minimum maquila volume; client-facility work; time to start | Searchable/scannable FAQ with reviewed answers |
-| Contact | WhatsApp `55 44 79 26 96`; `54 44 57 58 87`; `alfredocervantess@live.com.mx`; Mar del Frío #60, Col. Ciudad Brisa, Alcaldía Naucalpan de Juárez, Estado de México; Monday–Saturday 08:00–18:00 | Use the first number as the WhatsApp CTA target; display both phone numbers, email, address, and hours in the footer. |
+| Contact | WhatsApp `55 44 79 26 96`; `54 44 57 58 87`; mobile `55 35 68 95 49` (added 2026-10-04); `alfredocervantess@live.com.mx`; Mar del Frío #60, Col. Ciudad Brisa, Alcaldía Naucalpan de Juárez, Estado de México; Monday–Saturday 08:00–18:00 | Use the first number as the WhatsApp CTA target; display all three phone numbers, email, address, and hours in the footer. |
 
 ## Proposed information architecture
 
@@ -134,7 +134,7 @@ The design handoff must include evidence for the same illustrative map behavior 
 
 ## Open decisions before implementation
 
-- Confirm final service taxonomy, coverage areas, and buyer CTAs. Contact ownership and contact details are approved: the “Pida informes por WhatsApp” CTA opens WhatsApp for `55 44 79 26 96`; the footer displays both numbers, `alfredocervantess@live.com.mx`, the approved address, and Monday–Saturday 08:00–18:00.
+- Confirm final service taxonomy, coverage areas, and buyer CTAs. Contact ownership and contact details are approved: the “Pida informes por WhatsApp” CTA opens WhatsApp for `55 44 79 26 96`; the footer displays all three phone numbers (WhatsApp, `54 44 57 58 87`, mobile `55 35 68 95 49`), `alfredocervantess@live.com.mx`, the approved address, and Monday–Saturday 08:00–18:00.
 - Verify REPSE wording, 25+ years claim, and all proof points with authorized sources.
 - A supplied raster logo source is documented in the [brand manual](./brand-manual.md). Obtain the master vector asset and stakeholder approval of that manual before final brand implementation; the selected working palette remains olive-green primary `#405329` and complementary secondary `#A3A263` until then.
 - Select image licensing/source and establish consent requirements for any real workforce photography.

@@ -172,6 +172,7 @@ Contact data per PRD:46-47 (approved). Live site differs; see section 11.
 - Descriptor: Servicios logísticos, maquila y personal especializado para empresas que no pueden detener su operación. (live footer text)
 - WhatsApp: **55 44 79 26 96** (CTA: "Pida informes por WhatsApp", `https://wa.me/525544792696`)
 - Teléfono: 54 44 57 58 87
+- Celular: 55 35 68 95 49 (owner, 2026-10-04)
 - Correo: alfredocervantess@live.com.mx
 - Dirección: Mar del Frío #60, Col. Ciudad Brisa, Alcaldía Naucalpan de Juárez, Estado de México
 - Horario: Lunes a sábado, 08:00 a 18:00 h
