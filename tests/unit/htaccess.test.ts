@@ -162,6 +162,26 @@ describe('canonical host + HTTPS redirect', () => {
       },
     },
     {
+      name: 'canonical host with an explicit port (port-less target, no loop)',
+      req: { host: `${SITE_HOST}:443`, https: true, path: '/' },
+      location: target('/'),
+    },
+    {
+      name: 'canonical host with a trailing dot',
+      req: { host: `${SITE_HOST}.`, https: true, path: '/' },
+      location: target('/'),
+    },
+    {
+      name: 'multi-value X-Forwarded-Proto on canonical (fails safe)',
+      req: {
+        host: SITE_HOST,
+        https: false,
+        xForwardedProto: 'https,http',
+        path: '/',
+      },
+      location: target('/'),
+    },
+    {
       name: 'X-Forwarded-Proto http on canonical',
       req: {
         host: SITE_HOST,
