@@ -34,7 +34,7 @@ Phase 0 (PR #3), Phase 1 (PR #5), design system (PR #6), photography (PR #7), Ph
 
 ## Phase 0: Tooling and walking skeleton (PR 1)
 
-- [x] 0.1 Scaffold Astro (static, `build.format: 'directory'`, `site: https://logispack.capitalhumano.com.mx`), TypeScript strict, pnpm, `.nvmrc`, ESLint + Prettier. **Done:** `pnpm build` produces `dist/`. **[ADR 0002]**
+- [x] 0.1 Scaffold Astro (static, `build.format: 'directory'`, `site: https://logispack-capitalhumano.com.mx`), TypeScript strict, pnpm, `.nvmrc`, ESLint + Prettier. **Done:** `pnpm build` produces `dist/`. **[ADR 0002]**
 - [x] 0.2 Add Vitest and Playwright + `@axe-core/playwright` with one failing smoke test (Home renders `<h1>` and a WhatsApp link), then make it pass. **Done:** `pnpm test` and `pnpm test:e2e` run locally. **[ADR 0002]**
 - [x] 0.3 Add GitHub Actions CI: install → lint → `astro check` → unit → build → e2e/a11y; set the real commands in `.github/PULL_REQUEST_TEMPLATE.md`. **Done:** CI blocks a red PR. **[ADR 0002]**
 - [x] 0.4 Test-first: `tokens.css` exposes the design-system tokens (single light theme) and each documented pairing meets its contrast ratio (unit test parses tokens). Implement `src/styles/tokens.css`. **[Design: palette]**
