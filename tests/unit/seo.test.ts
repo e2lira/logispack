@@ -5,8 +5,7 @@ import {
   absoluteUrl,
   buildOrganizationJsonLd,
 } from '../../src/lib/seo';
-
-const SITE = 'https://logispack.capitalhumano.com.mx';
+import { SITE_URL as SITE } from '../../site.config.mjs';
 
 describe('absoluteUrl', () => {
   it('resolves a path against the site origin', () => {

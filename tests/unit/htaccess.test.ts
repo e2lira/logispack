@@ -1,6 +1,8 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { SITE_HOST, SITE_URL } from '../../site.config.mjs';
+import { evaluate, redirectConds, redirectRule } from './htaccess-redirect';
 
 const raw = readFileSync(resolve(__dirname, '../../public/.htaccess'), 'utf8');
 // Directives only: drop comment lines so prose cannot trip the assertions.
@@ -65,8 +67,178 @@ describe('public/.htaccess (shared hosting safe)', () => {
     );
   });
 
-  it('keeps the HTTPS redirect and does not enable HSTS', () => {
-    expect(source).toMatch(/RewriteRule \^ https:\/\//);
+  it('does not enable HSTS', () => {
     expect(source).not.toMatch(/Strict-Transport-Security/i);
+  });
+});
+
+describe('canonical host + HTTPS redirect', () => {
+  const escapedHost = SITE_HOST.replace(/\./g, String.raw`\.`);
+
+  it('uses exactly one R=301 rule to the canonical https URL', () => {
+    const rules = source.split('\n').filter((l) => /R=301/.test(l));
+    expect(rules).toHaveLength(1);
+    expect(rules[0]?.trim()).toBe(
+      `RewriteRule ^ ${SITE_URL}%{REQUEST_URI} [L,R=301]`,
+    );
+  });
+
+  it('checks the exact canonical host', () => {
+    expect(source).toContain(escapedHost);
+    expect(source).toMatch(/%\{HTTP_HOST\}/);
+  });
+
+  it('stays proxy-aware (HTTPS and X-Forwarded-Proto)', () => {
+    expect(source).toMatch(/%\{HTTPS\}/);
+    expect(source).toMatch(/%\{HTTP:X-Forwarded-Proto\}/);
+  });
+
+  it('exempts /.well-known/acme-challenge/ from the redirect', () => {
+    expect(redirectConds.join('\n')).toContain(
+      String.raw`!^/\.well-known/acme-challenge/`,
+    );
+  });
+
+  it('declares the redirect before the dotfile block', () => {
+    expect(source.indexOf('R=301')).toBeLessThan(source.indexOf('[F,L]'));
+  });
+
+  it('has the redirect rule and conditions inside mod_rewrite', () => {
+    expect(redirectRule).toBeDefined();
+    expect(redirectConds.length).toBeGreaterThan(0);
+  });
+
+  const target = (path: string) => `${SITE_URL}${path}`;
+  const cases: Array<{
+    name: string;
+    req: Parameters<typeof evaluate>[0];
+    location?: string;
+  }> = [
+    {
+      name: 'http + canonical',
+      req: { host: SITE_HOST, https: false, path: '/a/' },
+      location: target('/a/'),
+    },
+    {
+      name: 'https + www.com.mx',
+      req: { host: `www.${SITE_HOST}`, https: true, path: '/servicios/' },
+      location: target('/servicios/'),
+    },
+    {
+      name: 'http + secondary .mx',
+      req: { host: 'logispack-capitalhumano.mx', https: false, path: '/x' },
+      location: target('/x'),
+    },
+    {
+      name: 'https + secondary .mx',
+      req: { host: 'logispack-capitalhumano.mx', https: true, path: '/' },
+      location: target('/'),
+    },
+    {
+      name: 'https + www.mx',
+      req: { host: 'www.logispack-capitalhumano.mx', https: true, path: '/' },
+      location: target('/'),
+    },
+    {
+      name: 'old placeholder subdomain',
+      req: { host: `logispack.${SITE_HOST}`, https: true, path: '/' },
+      location: target('/'),
+    },
+    {
+      name: 'https + canonical',
+      req: { host: SITE_HOST, https: true, path: '/' },
+    },
+    {
+      name: 'canonical host casing',
+      req: { host: SITE_HOST.toUpperCase(), https: true, path: '/' },
+    },
+    {
+      name: 'X-Forwarded-Proto https on canonical',
+      req: {
+        host: SITE_HOST,
+        https: false,
+        xForwardedProto: 'https',
+        path: '/',
+      },
+    },
+    {
+      name: 'canonical host with an explicit port (port-less target, no loop)',
+      req: { host: `${SITE_HOST}:443`, https: true, path: '/' },
+      location: target('/'),
+    },
+    {
+      name: 'canonical host with a trailing dot',
+      req: { host: `${SITE_HOST}.`, https: true, path: '/' },
+      location: target('/'),
+    },
+    {
+      name: 'multi-value X-Forwarded-Proto on canonical (fails safe)',
+      req: {
+        host: SITE_HOST,
+        https: false,
+        xForwardedProto: 'https,http',
+        path: '/',
+      },
+      location: target('/'),
+    },
+    {
+      name: 'X-Forwarded-Proto http on canonical',
+      req: {
+        host: SITE_HOST,
+        https: false,
+        xForwardedProto: 'http',
+        path: '/',
+      },
+      location: target('/'),
+    },
+    {
+      name: 'acme challenge on secondary .mx (http)',
+      req: {
+        host: 'logispack-capitalhumano.mx',
+        https: false,
+        path: '/.well-known/acme-challenge/token123',
+      },
+    },
+    {
+      name: 'acme challenge on canonical (http)',
+      req: {
+        host: SITE_HOST,
+        https: false,
+        path: '/.well-known/acme-challenge/token123',
+      },
+    },
+    {
+      name: 'other .well-known path is not exempt',
+      req: {
+        host: 'logispack-capitalhumano.mx',
+        https: false,
+        path: '/.well-known/security.txt',
+      },
+      location: target('/.well-known/security.txt'),
+    },
+  ];
+
+  it.each(cases)('$name', ({ req, location }) => {
+    const out = evaluate(req);
+    if (location) {
+      expect(out).toEqual({ redirect: true, status: 301, location });
+    } else {
+      expect(out.redirect).toBe(false);
+    }
+  });
+
+  it('never chains: the redirect target itself is not redirected', () => {
+    const out = evaluate({
+      host: 'logispack-capitalhumano.mx',
+      https: false,
+      path: '/p',
+    });
+    const url = new URL(out.location ?? '');
+    const next = evaluate({
+      host: url.host,
+      https: url.protocol === 'https:',
+      path: url.pathname,
+    });
+    expect(next.redirect).toBe(false);
   });
 });

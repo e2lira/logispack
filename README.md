@@ -42,9 +42,9 @@ Per [ADR 0002](docs/implementation-stack.md#deployment).
 ### Upload
 
 1. Copy the previous release first: download the current document root (or keep the previous `dist/` folder) so a rollback is possible.
-2. Connect by SFTP to the subdomain's document root for `logispack.capitalhumano.com.mx`.
+2. Connect by SFTP to the document root of `logispack-capitalhumano.com.mx` (the secondary domain `logispack-capitalhumano.mx` must point to the same document root; `.htaccess` redirects it).
 3. Upload the **contents** of `dist/` (not the `dist` folder itself) into the document root, replacing the previous files.
-4. **Confirm SSL is active on the subdomain before uploading `.htaccess`** (it forces HTTPS; to disable it temporarily, comment out the redirect rules). Then make sure `.htaccess` was uploaded. It is a dotfile and many SFTP clients hide dotfiles: enable "show hidden files" (FileZilla: Server > Force showing hidden files) and confirm it is listed in the document root.
+4. **Confirm SSL is active on the canonical domain before uploading `.htaccess`** (it forces HTTPS; to disable it temporarily, comment out the redirect rules). Then make sure `.htaccess` was uploaded. It is a dotfile and many SFTP clients hide dotfiles: enable "show hidden files" (FileZilla: Server > Force showing hidden files) and confirm it is listed in the document root.
 5. Remove files from the previous release that no longer exist in `dist/` (hashed files in `_astro/` change on every build).
 
 `.htaccess` is only honoured by Apache and LiteSpeed; Nginx ignores it, so HTTPS redirect, custom 404 and cache headers would then have to be configured in the HospedandoMX panel. Every directive group is wrapped in `<IfModule>`, so an unavailable module cannot cause a 500 error. The Content-Security-Policy is strict (`script-src 'self'`, `style-src 'self'`); only `style="..."` attributes are allowed inline.
@@ -55,12 +55,12 @@ Re-upload the previous `dist/` contents over the document root (or restore the d
 
 ### Post-release smoke checks
 
-1. `curl -sI http://logispack.capitalhumano.com.mx/` returns `301` with `Location: https://...`.
-2. `https://logispack.capitalhumano.com.mx/` loads with a valid certificate and the shell (header, footer, WhatsApp link).
+1. `curl -sI http://logispack-capitalhumano.com.mx/` returns `301` with `Location: https://logispack-capitalhumano.com.mx/`; `curl -sI https://logispack-capitalhumano.mx/x?a=1` and the `www.` variants of both domains return a single `301` to `https://logispack-capitalhumano.com.mx/x?a=1`.
+2. `https://logispack-capitalhumano.com.mx/` loads with a valid certificate and the shell (header, footer, WhatsApp link).
 3. A missing URL such as `/no-existe/` returns status `404` and shows "Página no encontrada".
 4. `/sitemap-index.xml` and `/robots.txt` load; the sitemap lists 16 URLs.
 5. A service page loads, for example `/servicios/servicio-de-reparto/`, with images and fonts.
-6. `curl -sI https://logispack.capitalhumano.com.mx/` shows the security headers (`Content-Security-Policy`, `X-Content-Type-Options`) and a `/_astro/...` asset shows `Cache-Control: public, max-age=31536000, immutable`.
+6. `curl -sI https://logispack-capitalhumano.com.mx/` shows the security headers (`Content-Security-Policy`, `X-Content-Type-Options`) and a `/_astro/...` asset shows `Cache-Control: public, max-age=31536000, immutable`.
 7. Open the Home in a browser console: no CSP violations and the route map renders.
 
-Open items: confirm the HospedandoMX web server type (Apache vs LiteSpeed/Nginx), the document root, and the SSL certificate for the subdomain.
+Open items: confirm the HospedandoMX web server type (Apache vs LiteSpeed/Nginx), the document root, and the SSL certificate for both domains (HTTP-01 challenges under `/.well-known/acme-challenge/` are exempt from the redirect).

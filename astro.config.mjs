@@ -1,8 +1,9 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import { SITE_URL } from './site.config.mjs';
 
 export default defineConfig({
-  site: 'https://logispack.capitalhumano.com.mx',
+  site: SITE_URL,
   output: 'static',
   build: {
     format: 'directory',
