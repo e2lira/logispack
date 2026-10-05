@@ -3,7 +3,8 @@ import { expect, test } from '@playwright/test';
 import families from '../../src/content/families.json' with { type: 'json' };
 import services from '../../src/content/services.json' with { type: 'json' };
 
-const SITE = 'https://logispack.capitalhumano.com.mx';
+import { SITE_URL as SITE } from '../../site.config.mjs';
+
 const AXE_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];
 
 const routes = [

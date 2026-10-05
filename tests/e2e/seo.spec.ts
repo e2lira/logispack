@@ -5,7 +5,7 @@ import services from '../../src/content/services.json' with { type: 'json' };
 
 // Reads the built output: these specs run after `pnpm build` (see test:e2e).
 const DIST = join(process.cwd(), 'dist');
-const SITE = 'https://logispack.capitalhumano.com.mx';
+import { SITE_URL as SITE } from '../../site.config.mjs';
 
 const routes = [
   '/',

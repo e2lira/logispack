@@ -19,18 +19,29 @@
 # --- Custom 404 (core directive) -------------------------------------------
 ErrorDocument 404 /404.html
 
-# --- Force HTTPS (301) ------------------------------------------------------
-# !!! CONFIRM THAT SSL IS ACTIVE ON THE SUBDOMAIN BEFORE UPLOADING THIS FILE !!!
+# --- Canonical host + HTTPS (single 301) -----------------------------------
+# Canonical origin: https://logispack-capitalhumano.com.mx (no www). The secondary
+# domain logispack-capitalhumano.mx and every www. variant share this document
+# root and are sent to the canonical origin, preserving the path. Host and
+# scheme are fixed in ONE hop: no redirect chains, no loops.
+#
+# The single RewriteCond builds "host|HTTPS|X-Forwarded-Proto" and negates the
+# "already canonical" shape: exact host AND (HTTPS=on OR proxy says https).
+# The ACME exemption keeps HTTP-01 certificate issuance working on every domain
+# (the challenge is requested over plain HTTP, on whichever host is being
+# validated).
+#
+# !!! CONFIRM THAT SSL IS ACTIVE ON THE CANONICAL DOMAIN BEFORE UPLOADING !!!
 # Without a valid certificate every visit is redirected to a broken https:// URL.
-# To disable temporarily, comment out the three Rewrite lines below (the
-# RewriteCond lines and the redirect RewriteRule) and re-upload.
+# To disable temporarily, comment out the two RewriteCond lines and the
+# redirect RewriteRule below and re-upload.
 # HSTS is deliberately left out: add Strict-Transport-Security only after SSL is
 # confirmed working, starting with a short max-age=300 and raising it gradually.
 <IfModule mod_rewrite.c>
   RewriteEngine On
-  RewriteCond %{HTTPS} !=on
-  RewriteCond %{HTTP:X-Forwarded-Proto} !https
-  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+  RewriteCond %{REQUEST_URI} !^/\.well-known/acme-challenge/
+  RewriteCond %{HTTP_HOST}|%{HTTPS}|%{HTTP:X-Forwarded-Proto} !^logispack-capitalhumano\.com\.mx\|(on\|.*|[^|]*\|https)$ [NC]
+  RewriteRule ^ https://logispack-capitalhumano.com.mx%{REQUEST_URI} [L,R=301]
 
   # Block dotfiles and dot-directories (.git, .env, .htaccess...), but keep
   # /.well-known/ reachable (ACME / SSL validation). Uses mod_rewrite instead of

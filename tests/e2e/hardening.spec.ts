@@ -2,6 +2,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { expect, test } from '@playwright/test';
+import { SITE_URL } from '../../site.config.mjs';
 import services from '../../src/content/services.json' with { type: 'json' };
 
 // Reads the built output: these specs run after `pnpm build` (see test:e2e).
@@ -89,10 +90,8 @@ test.describe('.htaccess', () => {
 
   test('forces HTTPS, serves the custom 404 and sets cache policy', () => {
     const file = htaccess();
-    expect(file).toMatch(/RewriteCond %\{HTTPS\} !=on/);
-    expect(file).toMatch(
-      /RewriteRule \^ https:\/\/%\{HTTP_HOST\}%\{REQUEST_URI\} \[L,R=301\]/,
-    );
+    expect(file).toMatch(/RewriteCond %\{HTTP_HOST\}\|%\{HTTPS\}/);
+    expect(file).toContain(`RewriteRule ^ ${SITE_URL}%{REQUEST_URI} [L,R=301]`);
     expect(file).toContain('ErrorDocument 404 /404.html');
     expect(file).toContain('public, max-age=31536000, immutable');
     expect(file).toContain('no-cache');
