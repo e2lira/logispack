@@ -26,7 +26,7 @@ Logispack v1 is a content marketing site with no backend, no contact form, no an
 | Lint / format | ESLint (`eslint-plugin-astro`, `eslint-plugin-jsx-a11y`) + Prettier | Consistent code and static a11y checks |
 | CI | GitHub Actions: install → lint → typecheck (`astro check`) → unit → build → e2e/a11y | Required PR gate |
 | Hosting | HospedandoMX shared hosting; manual SFTP upload of the built `dist/` folder | Owner-managed; no build runs on the server |
-| Domain | `https://logispack.capitalhumano.com.mx` (set as Astro `site`) | Canonical URLs, sitemap, and Open Graph tags derive from it |
+| Domain | Canonical `https://logispack-capitalhumano.com.mx` (set as Astro `site`); secondary `logispack-capitalhumano.mx` and `www.` variants 301-redirect to it via `.htaccess` (decision 2026-10-05; replaces the never-live placeholder `logispack.capitalhumano.com.mx`) | Canonical URLs, sitemap, and Open Graph tags derive from it; one canonical host avoids duplicate content |
 
 ## Constraints
 
@@ -50,4 +50,4 @@ Logispack v1 is a content marketing site with no backend, no contact form, no an
 
 ## Open questions
 
-1. Confirm the HospedandoMX web server (Apache vs LiteSpeed/Nginx), the document root for the subdomain, and that an SSL certificate is issued for `logispack.capitalhumano.com.mx`.
+1. Confirm the HospedandoMX web server (Apache vs LiteSpeed/Nginx), that both domains (`logispack-capitalhumano.com.mx` as primary and `logispack-capitalhumano.mx` as alias/addon) point to the same document root, and that SSL certificates are issued for both domains and their `www.` variants.
